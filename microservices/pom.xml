@@ -9,9 +9,9 @@
 	<name>Airline System</name>
 	
     <modules>
-        <module>common-lib</module>
         <module>cloud</module>
-        <module>services</module>
+        <module>common-lib</module>
+        <module>services/location-service</module>
     </modules>
 
     <properties>
