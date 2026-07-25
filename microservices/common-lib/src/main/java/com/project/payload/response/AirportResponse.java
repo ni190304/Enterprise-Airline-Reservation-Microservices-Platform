@@ -18,7 +18,7 @@ public class AirportResponse {
     private String iataCode;
     private String name;
     private String detailedName;
-    private ZoneId timeZone;
+    // private ZoneId timeZone;
     private Address address;
     private CityResponse city;
     private GeoCode geoCode;
