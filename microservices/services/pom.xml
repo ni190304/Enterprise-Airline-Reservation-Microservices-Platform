@@ -16,7 +16,7 @@
 	<name>Business Services</name>
 	
     <modules>
-        <!-- <module>user-services</module> -->
+        <module>user-service</module>
         <module>location-service</module>
     </modules>
 

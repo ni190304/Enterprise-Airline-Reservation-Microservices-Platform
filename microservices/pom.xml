@@ -12,7 +12,8 @@
         <module>cloud</module>
         <module>common-lib</module>
         <module>services/location-service</module>
-    </modules>
+        <module>services/user-service</module>
+   </modules>
 
     <properties>
         <!--  Java version for compilation  -->

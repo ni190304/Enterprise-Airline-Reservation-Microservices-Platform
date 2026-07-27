@@ -59,6 +59,7 @@ public class AirportController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse> deleteAirport(@PathVariable Long id) throws Exception {
+        airportService.deleteAirport(id);
         return ResponseEntity.ok(new ApiResponse("Airport deleted successfully"));
     }
 
