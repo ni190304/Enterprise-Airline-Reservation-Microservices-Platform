@@ -13,6 +13,7 @@
         <module>common-lib</module>
         <module>services/location-service</module>
         <module>services/user-service</module>
+        <module>services/airline-core-service</module>
    </modules>
 
     <properties>

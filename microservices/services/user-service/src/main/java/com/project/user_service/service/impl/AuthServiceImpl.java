@@ -79,8 +79,8 @@ public class AuthServiceImpl implements AuthService {
 
         AuthResponse authResponse = new AuthResponse();
         authResponse.setJwt(jwt);
-        authResponse.setMessage("Registered successfully");
-        authResponse.setTitle("Welcome " + user.getFullName());
+        authResponse.setMessage("Login successfully");
+        authResponse.setTitle("Welcome back " + user.getFullName());
         authResponse.setUser(UserMapper.toDTO(user));
 
         return authResponse;
