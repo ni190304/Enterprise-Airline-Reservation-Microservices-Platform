@@ -6,9 +6,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.project.airline_core_service.AirlineRepository;
 import com.project.airline_core_service.mapper.AirlineMapper;
 import com.project.airline_core_service.model.Airline;
+import com.project.airline_core_service.repository.AirlineRepository;
 import com.project.airline_core_service.service.AirlineService;
 import com.project.enums.AirlineStatus;
 import com.project.payload.request.AirlineRequest;

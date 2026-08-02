@@ -1,4 +1,4 @@
-package com.project.airline_core_service;
+package com.project.airline_core_service.repository;
 
 import java.util.Optional;
 

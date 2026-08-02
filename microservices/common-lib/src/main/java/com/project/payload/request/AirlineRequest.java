@@ -22,7 +22,7 @@ public class AirlineRequest {
     private String iataCode;
 
     @NotBlank(message = "icao code is mandatory")
-    @Size(min = 2,max = 2,message = "ICAO code must be exactly 2 char.")
+    @Size(min = 3,max = 3,message = "ICAO code must be exactly 3 char.")
     private String icaoCode;
 
     @NotBlank(message = "airline name is mandatory")
