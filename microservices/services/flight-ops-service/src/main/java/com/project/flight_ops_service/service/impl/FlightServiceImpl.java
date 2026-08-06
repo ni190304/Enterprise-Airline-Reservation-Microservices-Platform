@@ -42,27 +42,45 @@ public class FlightServiceImpl implements FlightService {
     }
 
     @Override
-    public FlightResponse getFlightById(Long id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getFlightById'");
+    public FlightResponse getFlightById(Long id) throws Exception {
+        Flight flight = flightRepository.findById(id).orElseThrow(
+                () -> new Exception("flight not found with the id" + id));
+
+        return convertToFlightResponse(flight);
     }
 
     @Override
-    public FlightResponse updateFlight(Long id, FlightRequest flightRequest) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'updateFlight'");
+    public FlightResponse updateFlight(Long id, FlightRequest flightRequest) throws Exception {
+        Flight existing = flightRepository.findById(id).orElseThrow(
+                () -> new Exception("flight not found with the id" + id));
+
+        if (flightRequest.getFlightNumber() != null
+                && flightRepository.existsByFlightNumberAndIdNot(flightRequest.getFlightNumber(), id)) {
+            throw new Exception("flight with id already exist.");
+        }
+
+        FlightMapper.updateEntity(flightRequest, existing);
+        Flight updated = FlightMapper.toEntity(flightRequest);
+        return convertToFlightResponse(updated);
     }
 
     @Override
-    public FlightResponse changeStatus(Long id, FlightStatus status) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'changeStatus'");
+    public FlightResponse changeStatus(Long id, FlightStatus status) throws Exception {
+        Flight existing = flightRepository.findById(id).orElseThrow(
+                () -> new Exception("flight not found with the id" + id));
+
+        existing.setStatus(status);
+        Flight updated = flightRepository.save(existing);
+        return convertToFlightResponse(updated);
+
     }
 
     @Override
-    public void deleteFlight(Long id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'deleteFlight'");
+    public void deleteFlight(Long airlineId , Long id) throws Exception {
+        Flight existing = flightRepository.findByAirlineIdAndId(airlineId,id).orElseThrow(
+                () -> new Exception("flight not found with the id" + id));
+
+        flightRepository.delete(existing);
     }
 
     @Override

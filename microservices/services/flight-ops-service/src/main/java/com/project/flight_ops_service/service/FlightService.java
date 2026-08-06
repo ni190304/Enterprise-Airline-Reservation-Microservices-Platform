@@ -15,14 +15,14 @@ public interface FlightService {
     Page<FlightResponse> getFlightsByAirline(Long airlineId, Long departureAirportId, Long arrivalAirportId,
             Pageable pageable);
 
-    FlightResponse getFlightById(Long id);
+    FlightResponse getFlightById(Long id) throws Exception;
 
-    FlightResponse updateFlight(Long id, FlightRequest flightRequest);
+    FlightResponse updateFlight(Long id, FlightRequest flightRequest) throws Exception;
 
-    FlightResponse changeStatus(Long id, FlightStatus status);
-
-    void deleteFlight(Long id);
+    FlightResponse changeStatus(Long id, FlightStatus status) throws Exception;
 
     FlightResponse convertToFlightResponse(Flight flight);
+
+    void deleteFlight(Long airlineId, Long id) throws Exception;
 
 }

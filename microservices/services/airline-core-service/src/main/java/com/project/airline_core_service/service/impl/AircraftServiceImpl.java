@@ -74,7 +74,7 @@ public class AircraftServiceImpl implements AircraftService {
 
         if (aircraft.getCode() != null
                 && !aircraft.getCode().equals(request.getCode())
-                && aircraftRepository.existsByCode(request.getCode())) {
+                && aircraftRepository.existsByCodeAndId(request.getCode(),id)) {
             throw new Exception("Aircraft with this code already exists");
         }
 
