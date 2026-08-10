@@ -2,6 +2,7 @@ package com.project.flight_ops_service.service.impl;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
 
 import com.project.enums.FlightStatus;
 import com.project.flight_ops_service.mapper.FlightMapper;
@@ -14,9 +15,15 @@ import com.project.payload.response.AirlineResponse;
 import com.project.payload.response.AirportResponse;
 import com.project.payload.response.FlightResponse;
 
+@Service
 public class FlightServiceImpl implements FlightService {
 
-    private final FlightRepository flightRepository = null;
+    private final FlightRepository flightRepository;
+
+    public FlightServiceImpl(FlightRepository flightRepository) {
+        this.flightRepository = flightRepository;
+    }
+
 
     @Override
     public FlightResponse createFlight(Long airlineId, FlightRequest flightRequest) throws Exception {
