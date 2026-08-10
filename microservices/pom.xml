@@ -15,6 +15,7 @@
         <module>services/user-service</module>
         <module>services/airline-core-service</module>
         <module>services/flight-ops-service</module>
+        <module>services/pricing-service</module>
    </modules>
 
     <properties>
