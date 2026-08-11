@@ -9,16 +9,16 @@ import com.project.pricing_service.model.Fare;
 
 public interface FareService {
 
-    FareResponse createFare(FareRequest request);
+    FareResponse createFare(FareRequest request) throws Exception;
 
-    FareResponse getFareById(Long id);
+    FareResponse getFareById(Long id) throws Exception;
 
     List<FareResponse> getFaresByFlightIdAndCabinClassId(
             Long flightId, Long cabinClassId);
 
     FareResponse updateFare(Long id, FareRequest request);
 
-    void deleteFare(Long id);
+    void deleteFare(Long id) throws Exception;
 
     List<Fare> getFares();
 
