@@ -1,5 +1,7 @@
 package com.project.seat_service.mapper;
 
+import java.util.stream.Collectors;
+
 import com.project.payload.response.FlightInstanceCabinResponse;
 import com.project.seat_service.model.FlightInstanceCabin;
 
@@ -14,10 +16,10 @@ public class FlightInstanceCabinMapper {
                 .flightInstanceId(fic.getFlightInstanceId())
                 .cabinClassType(fic.getCabinClass().getName())
                 .cabinClass(CabinClassMapper.toResponse(
-                        fic.getCabinClass()))
+                        fic.getCabinClass(), fic.getCabinClass().getSeatMap()))
 
-                // todo : set seat instance
-                // .seats ()
+                .seats(fic.getSeats() != null ? fic.getSeats().stream().map(
+                        SeatInstanceMapper::toResponse).collect(Collectors.toList()) : null)
 
                 .seatMap(fic.getCabinClass() != null && fic.getCabinClass().getSeatMap() != null
                         ? SeatMapMapper.toSimpleResponse(fic.getCabinClass().getSeatMap())

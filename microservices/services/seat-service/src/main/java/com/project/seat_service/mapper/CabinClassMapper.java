@@ -3,6 +3,7 @@ package com.project.seat_service.mapper;
 import com.project.payload.request.CabinClassRequest;
 import com.project.payload.response.CabinClassResponse;
 import com.project.seat_service.model.CabinClass;
+import com.project.seat_service.model.SeatMap;
 
 public class CabinClassMapper {
 
@@ -24,7 +25,7 @@ public class CabinClassMapper {
                 .build();
     }
 
-    public static CabinClassResponse toResponse(CabinClass cabinClass) {
+    public static CabinClassResponse toResponse(CabinClass cabinClass, SeatMap seatMap) {
         if (cabinClass == null)
             return null;
 
@@ -35,7 +36,7 @@ public class CabinClassMapper {
                 .description(cabinClass.getDescription())
                 .aircraftId(cabinClass.getAircraftId())
                 // todo: watch
-                // .seatMap(seatMap != null ? SeatMapMapper.toResponse(seatMap) : null)
+                .seatMap(seatMap != null ? SeatMapMapper.toResponse(seatMap) : null)
                 .displayOrder(cabinClass.getDisplayOrder())
                 .isActive(cabinClass.getIsActive())
                 .isBookable(cabinClass.getIsBookable())
