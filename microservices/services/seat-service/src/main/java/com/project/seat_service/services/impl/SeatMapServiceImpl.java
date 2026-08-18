@@ -10,6 +10,7 @@ import com.project.seat_service.model.SeatMap;
 import com.project.seat_service.repository.CabinClassRepository;
 import com.project.seat_service.repository.SeatMapRepository;
 import com.project.seat_service.services.SeatMapService;
+import com.project.seat_service.services.SeatService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -19,6 +20,7 @@ public class SeatMapServiceImpl implements SeatMapService {
 
     private final SeatMapRepository seatMapRepository;
     private final CabinClassRepository cabinClassRepository;
+    private final SeatService seatService;
 
     @Override
     public SeatMapResponse createSeatMap(Long airlineId, SeatMapRequest request) throws Exception {
@@ -34,6 +36,8 @@ public class SeatMapServiceImpl implements SeatMapService {
         SeatMap seatMap = SeatMapMapper.toEntity(request, cabinClass);
         seatMap.setAirlineId(airlineId);
         SeatMap savedSeatMap = seatMapRepository.save(seatMap);
+
+        seatService.generateSeats(savedSeatMap.getId());
 
         return SeatMapMapper.toResponse(savedSeatMap);
 
