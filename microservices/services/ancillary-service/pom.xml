@@ -6,13 +6,14 @@
 		<groupId>com.project</groupId>
 		<artifactId>services</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
+		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<artifactId>airline-core-service</artifactId>
-	<name/>
-	<description/>
+
+	<artifactId>ancillary-service</artifactId>
 	
 	<dependencies>
-	    <dependency>
+
+		<dependency>
 			<groupId>com.project</groupId>
 			<artifactId>common-lib</artifactId>
 			<version>${project.version}</version>
@@ -59,7 +60,6 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
-				
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

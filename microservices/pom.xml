@@ -17,6 +17,7 @@
         <module>services/flight-ops-service</module>
         <module>services/pricing-service</module>
         <module>services/seat-service</module>
+        <module>services/ancillary-service</module>
    </modules>
 
     <properties>
