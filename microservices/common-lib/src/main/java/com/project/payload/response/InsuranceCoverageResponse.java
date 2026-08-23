@@ -1,5 +1,7 @@
 package com.project.payload.response;
 
+import com.project.enums.CoverageType;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,4 +14,15 @@ import lombok.NoArgsConstructor;
 public class InsuranceCoverageResponse {
 
     private Long id;
+    private Long ancillaryId;
+    private String ancillaryName;
+    private CoverageType coverageType;
+    private String name;
+    private String description;
+    private Double coverageAmount;
+    private Boolean isFlat;
+    private String claimCondition;
+    private String emergencyContact;
+    private Integer displayOrder;
+    private Boolean active;
 }
