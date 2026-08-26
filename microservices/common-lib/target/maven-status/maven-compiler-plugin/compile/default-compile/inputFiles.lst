@@ -1,4 +1,6 @@
 C:\Users\Nihaal\OneDrive\Desktop\Enterprise Airline Reservation Microservices Platform\microservices\common-lib\src\main\java\com\project\CommonLibApplication.java
+C:\Users\Nihaal\OneDrive\Desktop\Enterprise Airline Reservation Microservices Platform\microservices\common-lib\src\main\java\com\project\domain\AncillaryMetadata.java
+C:\Users\Nihaal\OneDrive\Desktop\Enterprise Airline Reservation Microservices Platform\microservices\common-lib\src\main\java\com\project\domain\BaggageMetadata.java
 C:\Users\Nihaal\OneDrive\Desktop\Enterprise Airline Reservation Microservices Platform\microservices\common-lib\src\main\java\com\project\embeddable\Address.java
 C:\Users\Nihaal\OneDrive\Desktop\Enterprise Airline Reservation Microservices Platform\microservices\common-lib\src\main\java\com\project\embeddable\BoardingBenefits.java
 C:\Users\Nihaal\OneDrive\Desktop\Enterprise Airline Reservation Microservices Platform\microservices\common-lib\src\main\java\com\project\embeddable\FlexibilityBenefits.java
@@ -8,7 +10,9 @@ C:\Users\Nihaal\OneDrive\Desktop\Enterprise Airline Reservation Microservices Pl
 C:\Users\Nihaal\OneDrive\Desktop\Enterprise Airline Reservation Microservices Platform\microservices\common-lib\src\main\java\com\project\embeddable\SeatBenefits.java
 C:\Users\Nihaal\OneDrive\Desktop\Enterprise Airline Reservation Microservices Platform\microservices\common-lib\src\main\java\com\project\enums\AircraftStatus.java
 C:\Users\Nihaal\OneDrive\Desktop\Enterprise Airline Reservation Microservices Platform\microservices\common-lib\src\main\java\com\project\enums\AirlineStatus.java
+C:\Users\Nihaal\OneDrive\Desktop\Enterprise Airline Reservation Microservices Platform\microservices\common-lib\src\main\java\com\project\enums\AncillaryType.java
 C:\Users\Nihaal\OneDrive\Desktop\Enterprise Airline Reservation Microservices Platform\microservices\common-lib\src\main\java\com\project\enums\CabinClassType.java
+C:\Users\Nihaal\OneDrive\Desktop\Enterprise Airline Reservation Microservices Platform\microservices\common-lib\src\main\java\com\project\enums\CoverageType.java
 C:\Users\Nihaal\OneDrive\Desktop\Enterprise Airline Reservation Microservices Platform\microservices\common-lib\src\main\java\com\project\enums\FlightStatus.java
 C:\Users\Nihaal\OneDrive\Desktop\Enterprise Airline Reservation Microservices Platform\microservices\common-lib\src\main\java\com\project\enums\SeatAvailabilityStatus.java
 C:\Users\Nihaal\OneDrive\Desktop\Enterprise Airline Reservation Microservices Platform\microservices\common-lib\src\main\java\com\project\enums\SeatType.java
@@ -17,6 +21,7 @@ C:\Users\Nihaal\OneDrive\Desktop\Enterprise Airline Reservation Microservices Pl
 C:\Users\Nihaal\OneDrive\Desktop\Enterprise Airline Reservation Microservices Platform\microservices\common-lib\src\main\java\com\project\payload\request\AircraftRequest.java
 C:\Users\Nihaal\OneDrive\Desktop\Enterprise Airline Reservation Microservices Platform\microservices\common-lib\src\main\java\com\project\payload\request\AirlineRequest.java
 C:\Users\Nihaal\OneDrive\Desktop\Enterprise Airline Reservation Microservices Platform\microservices\common-lib\src\main\java\com\project\payload\request\AirportRequest.java
+C:\Users\Nihaal\OneDrive\Desktop\Enterprise Airline Reservation Microservices Platform\microservices\common-lib\src\main\java\com\project\payload\request\AncillaryRequest.java
 C:\Users\Nihaal\OneDrive\Desktop\Enterprise Airline Reservation Microservices Platform\microservices\common-lib\src\main\java\com\project\payload\request\BaggagePolicyRequest.java
 C:\Users\Nihaal\OneDrive\Desktop\Enterprise Airline Reservation Microservices Platform\microservices\common-lib\src\main\java\com\project\payload\request\CabinClassRequest.java
 C:\Users\Nihaal\OneDrive\Desktop\Enterprise Airline Reservation Microservices Platform\microservices\common-lib\src\main\java\com\project\payload\request\CityRequest.java
@@ -24,15 +29,19 @@ C:\Users\Nihaal\OneDrive\Desktop\Enterprise Airline Reservation Microservices Pl
 C:\Users\Nihaal\OneDrive\Desktop\Enterprise Airline Reservation Microservices Platform\microservices\common-lib\src\main\java\com\project\payload\request\FareRulesRequest.java
 C:\Users\Nihaal\OneDrive\Desktop\Enterprise Airline Reservation Microservices Platform\microservices\common-lib\src\main\java\com\project\payload\request\FlightInstanceCabinRequest.java
 C:\Users\Nihaal\OneDrive\Desktop\Enterprise Airline Reservation Microservices Platform\microservices\common-lib\src\main\java\com\project\payload\request\FlightInstanceRequest.java
+C:\Users\Nihaal\OneDrive\Desktop\Enterprise Airline Reservation Microservices Platform\microservices\common-lib\src\main\java\com\project\payload\request\FlightMealRequest.java
 C:\Users\Nihaal\OneDrive\Desktop\Enterprise Airline Reservation Microservices Platform\microservices\common-lib\src\main\java\com\project\payload\request\FlightRequest.java
 C:\Users\Nihaal\OneDrive\Desktop\Enterprise Airline Reservation Microservices Platform\microservices\common-lib\src\main\java\com\project\payload\request\FlightScheduleRequest.java
+C:\Users\Nihaal\OneDrive\Desktop\Enterprise Airline Reservation Microservices Platform\microservices\common-lib\src\main\java\com\project\payload\request\InsuranceCoverageRequest.java
 C:\Users\Nihaal\OneDrive\Desktop\Enterprise Airline Reservation Microservices Platform\microservices\common-lib\src\main\java\com\project\payload\request\LoginRequest.java
+C:\Users\Nihaal\OneDrive\Desktop\Enterprise Airline Reservation Microservices Platform\microservices\common-lib\src\main\java\com\project\payload\request\MealRequest.java
 C:\Users\Nihaal\OneDrive\Desktop\Enterprise Airline Reservation Microservices Platform\microservices\common-lib\src\main\java\com\project\payload\request\SeatMapRequest.java
 C:\Users\Nihaal\OneDrive\Desktop\Enterprise Airline Reservation Microservices Platform\microservices\common-lib\src\main\java\com\project\payload\request\SeatRequest.java
 C:\Users\Nihaal\OneDrive\Desktop\Enterprise Airline Reservation Microservices Platform\microservices\common-lib\src\main\java\com\project\payload\response\AircraftResponse.java
 C:\Users\Nihaal\OneDrive\Desktop\Enterprise Airline Reservation Microservices Platform\microservices\common-lib\src\main\java\com\project\payload\response\AirlineDropdownItem.java
 C:\Users\Nihaal\OneDrive\Desktop\Enterprise Airline Reservation Microservices Platform\microservices\common-lib\src\main\java\com\project\payload\response\AirlineResponse.java
 C:\Users\Nihaal\OneDrive\Desktop\Enterprise Airline Reservation Microservices Platform\microservices\common-lib\src\main\java\com\project\payload\response\AirportResponse.java
+C:\Users\Nihaal\OneDrive\Desktop\Enterprise Airline Reservation Microservices Platform\microservices\common-lib\src\main\java\com\project\payload\response\AncillaryResponse.java
 C:\Users\Nihaal\OneDrive\Desktop\Enterprise Airline Reservation Microservices Platform\microservices\common-lib\src\main\java\com\project\payload\response\ApiResponse.java
 C:\Users\Nihaal\OneDrive\Desktop\Enterprise Airline Reservation Microservices Platform\microservices\common-lib\src\main\java\com\project\payload\response\AuthResponse.java
 C:\Users\Nihaal\OneDrive\Desktop\Enterprise Airline Reservation Microservices Platform\microservices\common-lib\src\main\java\com\project\payload\response\BaggagePolicyResponse.java
@@ -42,8 +51,11 @@ C:\Users\Nihaal\OneDrive\Desktop\Enterprise Airline Reservation Microservices Pl
 C:\Users\Nihaal\OneDrive\Desktop\Enterprise Airline Reservation Microservices Platform\microservices\common-lib\src\main\java\com\project\payload\response\FareRulesResponse.java
 C:\Users\Nihaal\OneDrive\Desktop\Enterprise Airline Reservation Microservices Platform\microservices\common-lib\src\main\java\com\project\payload\response\FlightInstanceCabinResponse.java
 C:\Users\Nihaal\OneDrive\Desktop\Enterprise Airline Reservation Microservices Platform\microservices\common-lib\src\main\java\com\project\payload\response\FlightInstanceResponse.java
+C:\Users\Nihaal\OneDrive\Desktop\Enterprise Airline Reservation Microservices Platform\microservices\common-lib\src\main\java\com\project\payload\response\FlightMealResponse.java
 C:\Users\Nihaal\OneDrive\Desktop\Enterprise Airline Reservation Microservices Platform\microservices\common-lib\src\main\java\com\project\payload\response\FlightResponse.java
 C:\Users\Nihaal\OneDrive\Desktop\Enterprise Airline Reservation Microservices Platform\microservices\common-lib\src\main\java\com\project\payload\response\FlightScheduleResponse.java
+C:\Users\Nihaal\OneDrive\Desktop\Enterprise Airline Reservation Microservices Platform\microservices\common-lib\src\main\java\com\project\payload\response\InsuranceCoverageResponse.java
+C:\Users\Nihaal\OneDrive\Desktop\Enterprise Airline Reservation Microservices Platform\microservices\common-lib\src\main\java\com\project\payload\response\MealResponse.java
 C:\Users\Nihaal\OneDrive\Desktop\Enterprise Airline Reservation Microservices Platform\microservices\common-lib\src\main\java\com\project\payload\response\SeatInstanceResponse.java
 C:\Users\Nihaal\OneDrive\Desktop\Enterprise Airline Reservation Microservices Platform\microservices\common-lib\src\main\java\com\project\payload\response\SeatMapResponse.java
 C:\Users\Nihaal\OneDrive\Desktop\Enterprise Airline Reservation Microservices Platform\microservices\common-lib\src\main\java\com\project\payload\response\SeatResponse.java

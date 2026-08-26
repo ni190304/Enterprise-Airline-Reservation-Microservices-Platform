@@ -24,7 +24,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/api/insurance-coverages")
 @RequiredArgsConstructor
-public class InsuranceCoveraageController {
+public class InsuranceCoverageController {
 
     private final InsuranceCoverageService insuranceCoverageService;
 

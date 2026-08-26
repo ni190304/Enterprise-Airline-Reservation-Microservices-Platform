@@ -32,6 +32,7 @@ public class InsuranceCoverageMapper {
         if (entity == null)
             return null;
         return InsuranceCoverageResponse.builder()
+        .id(entity.getId())
                 .ancillaryId(entity.getAncillary().getId())
                 .ancillaryName(entity.getAncillary().getName())
                 .coverageType(entity.getCoverageType())

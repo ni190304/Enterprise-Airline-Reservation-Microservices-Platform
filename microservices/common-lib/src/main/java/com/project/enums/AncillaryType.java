@@ -1,11 +1,8 @@
 package com.project.enums;
 
-/**
- * AncillaryType
- */
 public enum AncillaryType {
 
-    BAAGAGE,
+    BAGGAGE,
     TRAVEL_PROTECTION
 
 }

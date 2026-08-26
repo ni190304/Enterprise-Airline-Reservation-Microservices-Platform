@@ -42,6 +42,7 @@
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<optional>true</optional>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -86,14 +87,6 @@
 						<goals>
 							<goal>testCompile</goal>
 						</goals>
-						<configuration>
-							<annotationProcessorPaths>
-								<path>
-									<groupId>org.projectlombok</groupId>
-									<artifactId>lombok</artifactId>
-								</path>
-							</annotationProcessorPaths>
-						</configuration>
 					</execution>
 				</executions>
 			</plugin>

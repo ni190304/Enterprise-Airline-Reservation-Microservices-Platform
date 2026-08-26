@@ -32,7 +32,7 @@ public class SeatMapper {
                 .updatedAt(seat.getUpdatedAt())
                 .createdBy(seat.getCreatedBy())
                 .updatedBy(seat.getUpdatedBy())
-                .isBookable(seat.isBookable())
+                // .isBookable(false)
                 .fullPosition(seat.getFullPosition())
                 .build();
 

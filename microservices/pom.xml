@@ -18,6 +18,7 @@
         <module>services/pricing-service</module>
         <module>services/seat-service</module>
         <module>services/ancillary-service</module>
+        <module>services/booking-service</module>
    </modules>
 
     <properties>

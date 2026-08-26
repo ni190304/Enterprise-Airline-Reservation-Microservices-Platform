@@ -1,7 +1,5 @@
 package com.project.payload.response;
 
-import com.project.payload.response.MealResponse;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

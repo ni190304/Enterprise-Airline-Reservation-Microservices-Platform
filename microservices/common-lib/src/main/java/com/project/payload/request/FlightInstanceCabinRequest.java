@@ -2,6 +2,7 @@ package com.project.payload.request;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -27,8 +28,14 @@ public class FlightInstanceCabinRequest {
     private Double baseFare;
 
     @NotNull
-    private Double windowSurcharge;
+    @PositiveOrZero
+    private Double taxesAndFees;
 
     @NotNull
-    private Double aiseSurcharge;
+    @PositiveOrZero
+    private Double airlineFees;
+
+    private Double currentPrice;
+    private Boolean isActive;
+
 }
