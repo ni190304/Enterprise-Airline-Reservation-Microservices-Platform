@@ -12,7 +12,7 @@ public interface BookingService {
 
     BookingResponse updateBooking(Long id, BookingRequest request);
 
-    BookingResponse getBookingById(Long id);
+    BookingResponse getBookingById(Long id) throws Exception;
 
     List<BookingResponse> getAllBookingsByAirline(Long airlineId,
             String searchQuery,
@@ -24,8 +24,8 @@ public interface BookingService {
 
     List<BookingResponse> getBookingsByUser(Long userId);
 
-    BookingResponse cancelBooking(Long id);
+    BookingResponse cancelBooking(Long id) throws Exception;
 
-    void deleteBooking(Long id);
+    void deleteBooking(Long id) throws Exception;
 
 }

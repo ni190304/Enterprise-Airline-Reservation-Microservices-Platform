@@ -19,6 +19,7 @@
         <module>services/seat-service</module>
         <module>services/ancillary-service</module>
         <module>services/booking-service</module>
+        <module>services/payment-service</module>
    </modules>
 
     <properties>

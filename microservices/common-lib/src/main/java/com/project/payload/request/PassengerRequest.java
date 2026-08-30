@@ -42,7 +42,7 @@ public class PassengerRequest {
     private Gender gender;
 
     @NotNull(message = "Seat Instance ID is required")
-    private String seatInstanceId;
+    private Long seatInstanceId;
 
     private String nationality;
 
