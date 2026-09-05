@@ -8,6 +8,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.project.enums.FlightStatus;
+import com.project.flight_ops_service.client.LocationClient;
 import com.project.flight_ops_service.mapper.FlightScheduleMapper;
 import com.project.flight_ops_service.model.Flight;
 import com.project.flight_ops_service.model.FlightSchedule;
@@ -26,100 +27,100 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class FlightScheduleServiceImpl implements FlightScheduleService {
 
-    private final FlightRepository flightRepository;
-    private final FlightScheduleRepository flightScheduleRepository;
-    private final FlightInstanceService flightInstanceService;
+        private final FlightRepository flightRepository;
+        private final FlightScheduleRepository flightScheduleRepository;
+        private final FlightInstanceService flightInstanceService;
+        // private final AirlineClient airlineClient;
+        private final LocationClient locationClient;
 
-    @Override
-    public FlightScheduleResponse createFlightSchedule(Long airlineId, FlightScheduleRequest request) throws Exception {
+        @Override
+        public FlightScheduleResponse createFlightSchedule(Long airlineId, FlightScheduleRequest request)
+                        throws Exception {
 
-        Flight flight = flightRepository.findById(request.getFlightId()).orElseThrow(
-                () -> new Exception("flight not found with given id"));
+                Flight flight = flightRepository.findById(request.getFlightId()).orElseThrow(
+                                () -> new Exception("flight not found with given id"));
 
-        if (request.getEndDate().isBefore(request.getStartDate())) {
-            throw new Exception("end date is before start date");
+                if (request.getEndDate().isBefore(request.getStartDate())) {
+                        throw new Exception("end date is before start date");
+                }
+
+                FlightSchedule flightSchedule = FlightScheduleMapper.toEntity(request, flight);
+                FlightSchedule savedSchedule = flightScheduleRepository.save(flightSchedule);
+
+                List<DayOfWeek> operatingDays = savedSchedule.getOperatingDays();
+                LocalDate startDate = savedSchedule.getStartDate();
+                LocalDate endDate = savedSchedule.getEndDate();
+
+                FlightInstanceRequest flightInstanceRequest = FlightInstanceRequest.builder()
+                                .scheduleId(savedSchedule.getId())
+                                .flightId(flight.getId())
+                                .arrivalAirportId(flight.getArrivalAirportId())
+                                .departureAirportId(flight.getDepartureAirportId())
+                                .status(FlightStatus.SCHEDULED)
+                                .build();
+
+                for (LocalDate date = startDate; !date.isAfter(endDate); date = date.plusDays(1)) {
+
+                        if (operatingDays.contains(date.getDayOfWeek())) {
+
+                                flightInstanceRequest.setDepartureDateTime(
+                                                LocalDateTime.of(date, savedSchedule.getDepartureTime()));
+                                flightInstanceRequest.setArrivalDateTime(
+                                                LocalDateTime.of(date, savedSchedule.getArrivalTime()));
+                                flightInstanceService.createFlightInstance(airlineId, flightInstanceRequest);
+                        }
+
+                }
+
+                return convertToFlightScheduleResponse(savedSchedule);
+
         }
 
-        FlightSchedule flightSchedule = FlightScheduleMapper.toEntity(request, flight);
-        FlightSchedule savedSchedule = flightScheduleRepository.save(flightSchedule);
+        @Override
+        public FlightScheduleResponse getFlightScheduleById(Long id) throws Exception {
+                FlightSchedule flightSchedule = flightScheduleRepository.findById(id).orElseThrow(
+                                () -> new Exception("flight schedule not found"));
 
-        List<DayOfWeek> operatingDays = savedSchedule.getOperatingDays();
-        LocalDate startDate = savedSchedule.getStartDate();
-        LocalDate endDate = savedSchedule.getEndDate();
+                return convertToFlightScheduleResponse(flightSchedule);
+        }
 
-        FlightInstanceRequest flightInstanceRequest = FlightInstanceRequest.builder()
-                .scheduleId(savedSchedule.getId())
-                .flightId(flight.getId())
-                .arrivalAirportId(flight.getArrivalAirportId())
-                .departureAirportId(flight.getDepartureAirportId())
-                .status(FlightStatus.SCHEDULED)
-                .build();
+        @Override
+        public List<FlightScheduleResponse> getFlightScheduleByAirline(Long airlineId) {
 
-        for (LocalDate date = startDate; !date.isAfter(endDate); date = date.plusDays(1)) {
+                List<FlightSchedule> schedules = flightScheduleRepository.findByFlightAirlineId(airlineId);
 
-            if (operatingDays.contains(date.getDayOfWeek())) {
-
-                flightInstanceRequest.setDepartureDateTime(
-                        LocalDateTime.of(date, savedSchedule.getDepartureTime()));
-                flightInstanceRequest.setArrivalDateTime(
-                        LocalDateTime.of(date, savedSchedule.getArrivalTime()));
-                flightInstanceService.createFlightInstance(airlineId, flightInstanceRequest);
-            }
+                return schedules.stream().map(
+                                this::convertToFlightScheduleResponse).toList();
 
         }
 
-        return convertToFlightScheduleResponse(savedSchedule);
+        @Override
+        public FlightScheduleResponse updateFlightSchedule(Long id, FlightScheduleRequest request) throws Exception {
 
-    }
+                FlightSchedule flightSchedule = flightScheduleRepository.findById(id).orElseThrow(
+                                () -> new Exception("flight schedule not found"));
 
-    @Override
-    public FlightScheduleResponse getFlightScheduleById(Long id) throws Exception {
-        FlightSchedule flightSchedule = flightScheduleRepository.findById(id).orElseThrow(
-                () -> new Exception("flight schedule not found"));
+                FlightScheduleMapper.updateEntity(request, flightSchedule);
+                FlightSchedule updatedSchedule = flightScheduleRepository.save(flightSchedule);
 
-        return convertToFlightScheduleResponse(flightSchedule);
-    }
+                return convertToFlightScheduleResponse(updatedSchedule);
 
-    @Override
-    public List<FlightScheduleResponse> getFlightScheduleByAirline(Long airlineId) {
+        }
 
-        List<FlightSchedule> schedules = flightScheduleRepository.findByFlightAirlineId(airlineId);
+        @Override
+        public void deleteFlightSchedule(Long id) throws Exception {
+                FlightSchedule flightSchedule = flightScheduleRepository.findById(id).orElseThrow(
+                                () -> new Exception("flight schedule not found"));
 
-        return schedules.stream().map(
-                this::convertToFlightScheduleResponse).toList();
+                flightScheduleRepository.delete(flightSchedule);
+        }
 
-    }
-
-    @Override
-    public FlightScheduleResponse updateFlightSchedule(Long id, FlightScheduleRequest request) throws Exception {
-
-        FlightSchedule flightSchedule = flightScheduleRepository.findById(id).orElseThrow(
-                () -> new Exception("flight schedule not found"));
-
-        FlightScheduleMapper.updateEntity(request, flightSchedule);
-        FlightSchedule updatedSchedule = flightScheduleRepository.save(flightSchedule);
-
-        return convertToFlightScheduleResponse(updatedSchedule);
-
-    }
-
-    @Override
-    public void deleteFlightSchedule(Long id) throws Exception {
-        FlightSchedule flightSchedule = flightScheduleRepository.findById(id).orElseThrow(
-                () -> new Exception("flight schedule not found"));
-
-        flightScheduleRepository.delete(flightSchedule);
-    }
-
-    private FlightScheduleResponse convertToFlightScheduleResponse(FlightSchedule flightSchedule) {
-        AirportResponse departureAirport = AirportResponse.builder()
-                .id(flightSchedule.getDepartureAirportId())
-                .build();
-        AirportResponse arrivalAirport = AirportResponse.builder()
-                .id(flightSchedule.getArrivalAirportId())
-                .build();
-        return FlightScheduleMapper.toResponse(
-                flightSchedule, arrivalAirport, departureAirport);
-    }
+        private FlightScheduleResponse convertToFlightScheduleResponse(FlightSchedule flightSchedule) {
+                AirportResponse departureAirport = locationClient
+                                .getAirportById(flightSchedule.getDepartureAirportId());
+                AirportResponse arrivalAirport = locationClient.getAirportById(flightSchedule.getArrivalAirportId());
+                return FlightScheduleMapper.toResponse(
+                                flightSchedule, arrivalAirport, departureAirport);
+        }
 
 }

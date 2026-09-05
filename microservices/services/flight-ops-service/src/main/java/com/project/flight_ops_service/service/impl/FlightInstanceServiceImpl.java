@@ -7,6 +7,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.project.flight_ops_service.client.AirlineClient;
+import com.project.flight_ops_service.client.LocationClient;
 import com.project.flight_ops_service.mapper.FlightInstanceMapper;
 import com.project.flight_ops_service.model.Flight;
 import com.project.flight_ops_service.model.FlightInstance;
@@ -27,6 +29,8 @@ public class FlightInstanceServiceImpl implements FlightInstanceService {
 
         private final FlightRepository flightRepository;
         private final FlightInstanceRepository flightInstanceRepository;
+        private final AirlineClient airlineClient;
+        private final LocationClient locationClient;
 
         @Override
         public FlightInstanceResponse createFlightInstance(Long userId, FlightInstanceRequest request)
@@ -35,16 +39,15 @@ public class FlightInstanceServiceImpl implements FlightInstanceService {
                 Flight flight = flightRepository.findById(request.getFlightId()).orElseThrow(
                                 () -> new Exception("Flight not found"));
 
-                AircraftResponse aircraft = AircraftResponse.builder()
-                                .id(1L)
-                                .totalSeats(90)
-                                .build();
+                AircraftResponse aircraft = airlineClient.getAircraftById(flight.getAircraftId());
 
                 FlightInstance flightInstance = FlightInstanceMapper.toEntity(request, flight);
                 flightInstance.setTotalSeats(aircraft.getTotalSeats());
                 flightInstance.setAvailableSeats(aircraft.getTotalSeats());
 
                 FlightInstance saved = flightInstanceRepository.save(flightInstance);
+
+                // publish kafka event , seat service consume that and create seat instance
 
                 return convertToFlightInstanceResponse(saved);
 
@@ -97,18 +100,10 @@ public class FlightInstanceServiceImpl implements FlightInstanceService {
 
         private FlightInstanceResponse convertToFlightInstanceResponse(FlightInstance flightInstance) {
 
-                AirlineResponse airline = AirlineResponse.builder()
-                                .id(flightInstance.getAirlineId())
-                                .build();
-                AirportResponse departureAirport = AirportResponse.builder()
-                                .id(flightInstance.getDepartureAirportId())
-                                .build();
-                AirportResponse arrivalAirport = AirportResponse.builder()
-                                .id(flightInstance.getArrivalAirportId())
-                                .build();
-                AircraftResponse aircraftResponse = AircraftResponse.builder()
-                                .id(flightInstance.getFlight().getAircraftId())
-                                .build();
+                AirlineResponse airline = airlineClient.getAirlineById(flightInstance.getAirlineId());
+                AirportResponse departureAirport = locationClient.getAirportById(flightInstance.getDepartureAirportId());
+                AirportResponse arrivalAirport = locationClient.getAirportById(flightInstance.getArrivalAirportId());
+                AircraftResponse aircraftResponse = airlineClient.getAircraftById(flightInstance.getFlight().getAircraftId());
 
                 return FlightInstanceMapper.toResponse(
                                 flightInstance,
