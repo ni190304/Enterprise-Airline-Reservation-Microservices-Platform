@@ -5,9 +5,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.project.enums.FlightStatus;
+import com.project.flight_ops_service.client.AirlineClient;
+import com.project.flight_ops_service.client.LocationClient;
 import com.project.flight_ops_service.mapper.FlightMapper;
 import com.project.flight_ops_service.model.Flight;
 import com.project.flight_ops_service.repository.FlightRepository;
+
 import com.project.flight_ops_service.service.FlightService;
 import com.project.payload.request.FlightRequest;
 import com.project.payload.response.AircraftResponse;
@@ -15,15 +18,15 @@ import com.project.payload.response.AirlineResponse;
 import com.project.payload.response.AirportResponse;
 import com.project.payload.response.FlightResponse;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class FlightServiceImpl implements FlightService {
 
     private final FlightRepository flightRepository;
-
-    public FlightServiceImpl(FlightRepository flightRepository) {
-        this.flightRepository = flightRepository;
-    }
-
+    private final AirlineClient airlineClient;
+    private final LocationClient locationClient;
 
     @Override
     public FlightResponse createFlight(Long airlineId, FlightRequest flightRequest) throws Exception {
@@ -83,8 +86,8 @@ public class FlightServiceImpl implements FlightService {
     }
 
     @Override
-    public void deleteFlight(Long airlineId , Long id) throws Exception {
-        Flight existing = flightRepository.findByAirlineIdAndId(airlineId,id).orElseThrow(
+    public void deleteFlight(Long airlineId, Long id) throws Exception {
+        Flight existing = flightRepository.findByAirlineIdAndId(airlineId, id).orElseThrow(
                 () -> new Exception("flight not found with the id" + id));
 
         flightRepository.delete(existing);
@@ -93,21 +96,13 @@ public class FlightServiceImpl implements FlightService {
     @Override
     public FlightResponse convertToFlightResponse(Flight flight) {
 
-        AircraftResponse aircraft = AircraftResponse.builder()
-                .id(flight.getAircraftId())
-                .build();
+        AircraftResponse aircraft = airlineClient.getAircraftById(flight.getAircraftId());
 
-        AirlineResponse airline = AirlineResponse.builder()
-                .id(flight.getAirlineId())
-                .build();
+        AirlineResponse airline = airlineClient.getAirlineById(flight.getAirlineId());
 
-        AirportResponse departureAirport = AirportResponse.builder()
-                .id(flight.getDepartureAirportId())
-                .build();
+        AirportResponse departureAirport = locationClient.getAirportById(flight.getDepartureAirportId());
 
-        AirportResponse arrivalAirport = AirportResponse.builder()
-                .id(flight.getArrivalAirportId())
-                .build();
+        AirportResponse arrivalAirport = locationClient.getAirportById(flight.getArrivalAirportId());
 
         return FlightMapper.toResponse(flight, aircraft, airline, departureAirport, arrivalAirport);
     }
