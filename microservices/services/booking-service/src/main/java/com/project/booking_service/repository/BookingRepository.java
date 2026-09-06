@@ -14,14 +14,14 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
 
     List<Booking> findByUserId(Long userId);
 
-    long countryByFlightInstanceId(Long flightInstanceId);
+//     long countryByFlightInstanceId(Long flightInstanceId);
 
     @Query(
 
     """
                         select distinct b from Booking b
                         left join fetch b.passengers p
-                        where b.airlineId=JairlineId
+                        where b.airlineId=:airlineId
                         and (:search is null or LOWER(b.bookingReference) like lower(concat('%',:search, '%') )
                         or lower(p.firstName) like lower(concat('%',:search, '%') )
                         or lower(p. lastName) Like Lower(concat('%',:search, '%') )

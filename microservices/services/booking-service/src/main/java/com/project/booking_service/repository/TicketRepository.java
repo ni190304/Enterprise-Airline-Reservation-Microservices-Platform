@@ -20,7 +20,7 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
     List<Ticket> findByBookingIdWithDetails(
             @Param("bookingId") Long bookingId);
 
-    List<Ticket> findByBookIngId(long bookingId);
+    List<Ticket> findByBookingId(long bookingId);
 
     boolean existsByTicketNumber(String ticketNumber);
 

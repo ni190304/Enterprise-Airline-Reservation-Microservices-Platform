@@ -10,6 +10,10 @@ import java.util.stream.Collectors;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import com.project.booking_service.client.AncillaryClient;
+import com.project.booking_service.client.FlightClient;
+import com.project.booking_service.client.PaymentClient;
+import com.project.booking_service.client.SeatClient;
 import com.project.booking_service.mapper.BookingMapper;
 import com.project.booking_service.mapper.PaymentDTO;
 import com.project.booking_service.model.Booking;
@@ -18,15 +22,19 @@ import com.project.booking_service.repository.BookingRepository;
 import com.project.booking_service.service.BookingService;
 import com.project.booking_service.service.PassengerService;
 import com.project.booking_service.service.TicketService;
+import com.project.booking_service.service.integration.FareIntegrationService;
 import com.project.enums.BookingStatus;
+import com.project.enums.PaymentGateway;
 import com.project.payload.request.BookingRequest;
 import com.project.payload.request.PassengerRequest;
+import com.project.payload.request.PaymentInitiateRequest;
 import com.project.payload.response.BookingResponse;
 import com.project.payload.response.FareResponse;
 import com.project.payload.response.FlightCabinAncillaryResponse;
 import com.project.payload.response.FlightInstanceResponse;
 import com.project.payload.response.FlightMealResponse;
 import com.project.payload.response.FlightResponse;
+import com.project.payload.response.PaymentInitiateResponse;
 import com.project.payload.response.SeatInstanceResponse;
 
 import lombok.RequiredArgsConstructor;
@@ -38,9 +46,14 @@ public class BookingServiceImpl implements BookingService {
     private final BookingRepository bookingRepository;
     private final PassengerService passengerService;
     private final TicketService ticketService;
+    private final FlightClient flightClient;
+    private final FareIntegrationService fareIntegrationService;
+    private final SeatClient seatClient;
+    private final AncillaryClient ancillaryClient;
+    private final PaymentClient paymentClient;
 
     @Override
-    public BookingResponse createBooking(BookingRequest request, Long userId) {
+    public PaymentInitiateResponse createBooking(BookingRequest request, Long userId) {
 
         // step 1: create uniq booking reference
         String bookingReference = generateBookingReference();
@@ -52,14 +65,15 @@ public class BookingServiceImpl implements BookingService {
             passengers.add(passenger);
         }
 
-        // todo : step 3 flight exist
+        // step 3 flight exist
+        FlightResponse flightResponse = flightClient.getFlightById(request.getFlightId());
 
         // step 4: create booking with pending status
         Booking booking = BookingMapper.toEntity(request,
                 userId, passengers, bookingReference);
 
-        // todo: set airline id from flightResponse
-        booking.setAirlineId(1L);
+        // set airline id from flightResponse
+        booking.setAirlineId(flightResponse.getAirline().getId());
 
         // step 5: set seat instance ids
         List<Long> seatInstanceIds = request.getPassengers().stream()
@@ -76,7 +90,24 @@ public class BookingServiceImpl implements BookingService {
 
         ticketService.generateTicketsForBooking(booking);
 
-        return convertToBookingResponse(booking);
+        Double fareTotal = fareIntegrationService.calculateFareTotal(request.getFareId());
+        Double seatPrice = seatClient.calculateSeatPrice(booking.getSeatInstanceIds());
+        Double ancillaryPrice = ancillaryClient.calculateAncillariesPrice(booking.getAncillaryIds());
+        Double mealPrice = ancillaryClient.calculateMealPrice(booking.getMealIds());
+
+        Double totalPrice = mealPrice + seatPrice + ancillaryPrice;
+
+        PaymentInitiateRequest paymentRequest = PaymentInitiateRequest.builder()
+                .userId(userId)
+                .bookingId(booking.getId())
+                .amount(totalPrice)
+                .gateway(PaymentGateway.RAZORPAY)
+                .description("payment for booking ID : " + bookingReference)
+                .build();
+
+        PaymentInitiateResponse response = paymentClient.initiatePayment(paymentRequest);
+
+        return response;
 
     }
 

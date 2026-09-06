@@ -57,7 +57,7 @@ public class PaymentController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<PaymentDTO>> getALLPayments(
+    public ResponseEntity<Page<PaymentDTO>> getAllPayments(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size,
             @RequestParam(defaultValue = "createdAt") String sortBy,

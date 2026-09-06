@@ -19,6 +19,7 @@ import com.project.enums.BookingStatus;
 import com.project.payload.request.BookingRequest;
 import com.project.payload.response.ApiResponse;
 import com.project.payload.response.BookingResponse;
+import com.project.payload.response.PaymentInitiateResponse;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +32,7 @@ public class BookingController {
     private final BookingService bookingService;
 
     @PostMapping
-    public ResponseEntity<BookingResponse> createBooking(
+    public ResponseEntity<PaymentInitiateResponse> createBooking(
             @RequestHeader("X-User-Id") Long userId,
             @Valid @RequestBody BookingRequest bookingRequest) {
         return ResponseEntity.status(HttpStatus.CREATED)
