@@ -6,12 +6,23 @@ import org.springframework.cloud.gateway.server.mvc.handler.HandlerFunctions;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.function.RequestPredicates;
 import org.springframework.web.servlet.function.RouterFunction;
+import org.springframework.web.servlet.function.ServerRequest;
 import org.springframework.web.servlet.function.ServerResponse;
+
+import com.project.enums.UserRole;
 
 @Configuration
 public class RouteConfig {
+
+    private JwtUtil jwtUtil;
+
+    private RouteConfig(JwtUtil jwtUtil) {
+        this.jwtUtil = jwtUtil;
+    }
 
     @Bean
     public RouterFunction<ServerResponse> authRoutes() {
@@ -26,7 +37,9 @@ public class RouteConfig {
         return GatewayRouterFunctions.route("admin-location-routes")
                 .route(RequestPredicates.POST("/api/cities/**"), HandlerFunctions.http())
                 .route(RequestPredicates.POST("/api/airports/**"), HandlerFunctions.http())
-                .filter(LoadBalancerFilterFunctions.lb("airline-core-service"))
+                .filter(LoadBalancerFilterFunctions.lb("location-service"))
+                .before(this::jwtAuthFilter)
+                .before(request -> requireRole(request, UserRole.ROLE_SYSTEM_ADMIN.toString()))
                 .build();
     }
 
@@ -36,6 +49,8 @@ public class RouteConfig {
         return GatewayRouterFunctions.route("admin-airline-core-routes")
                 .route(RequestPredicates.GET("/api/airlines"), HandlerFunctions.http())
                 .filter(LoadBalancerFilterFunctions.lb("airline-core-service"))
+                .before(this::jwtAuthFilter)
+                .before(request -> requireRole(request, UserRole.ROLE_SYSTEM_ADMIN.toString()))
                 .build();
     }
 
@@ -44,6 +59,7 @@ public class RouteConfig {
         return GatewayRouterFunctions.route("user-service-routes")
                 .route(RequestPredicates.path("/api/users/**"), HandlerFunctions.http())
                 .filter(LoadBalancerFilterFunctions.lb("user-service"))
+                .before(this::jwtAuthFilter)
                 .build();
     }
 
@@ -54,6 +70,7 @@ public class RouteConfig {
                 .route(RequestPredicates.path("/api/airlines/**"), HandlerFunctions.http())
                 .route(RequestPredicates.path("/api/aircrafts/**"), HandlerFunctions.http())
                 .filter(LoadBalancerFilterFunctions.lb("airline-core-service"))
+                .before(this::jwtAuthFilter)
                 .build();
     }
 
@@ -66,6 +83,7 @@ public class RouteConfig {
                 .route(RequestPredicates.path("/api/seat-instances/**"), HandlerFunctions.http())
                 .route(RequestPredicates.path("/api/flight-instance-cabins/**"), HandlerFunctions.http())
                 .filter(LoadBalancerFilterFunctions.lb("seat-service"))
+                .before(this::jwtAuthFilter)
                 .build();
     }
 
@@ -76,6 +94,7 @@ public class RouteConfig {
                 .route(RequestPredicates.path("/api/flight-instances/**"), HandlerFunctions.http())
                 .route(RequestPredicates.path("/api/flight-schedules/**"), HandlerFunctions.http())
                 .filter(LoadBalancerFilterFunctions.lb("flight-ops-service"))
+                .before(this::jwtAuthFilter)
                 .build();
     }
 
@@ -86,6 +105,7 @@ public class RouteConfig {
                 .route(RequestPredicates.path("/api/fare-rules/**"), HandlerFunctions.http())
                 .route(RequestPredicates.path("/api/baggage-policies/**"), HandlerFunctions.http())
                 .filter(LoadBalancerFilterFunctions.lb("pricing-service"))
+                .before(this::jwtAuthFilter)
                 .build();
     }
 
@@ -98,6 +118,7 @@ public class RouteConfig {
                 .route(RequestPredicates.path("/api/flight-meals/**"), HandlerFunctions.http())
                 .route(RequestPredicates.path("/api/flight-cabin-ancillaries/**"), HandlerFunctions.http())
                 .filter(LoadBalancerFilterFunctions.lb("ancillary-service"))
+                .before(this::jwtAuthFilter)
                 .build();
     }
 
@@ -108,6 +129,7 @@ public class RouteConfig {
                 .route(RequestPredicates.path("/api/cities/**"), HandlerFunctions.http())
                 .route(RequestPredicates.path("/api/airports/**"), HandlerFunctions.http())
                 .filter(LoadBalancerFilterFunctions.lb("location-service"))
+                .before(this::jwtAuthFilter)
                 .build();
     }
 
@@ -116,6 +138,7 @@ public class RouteConfig {
         return GatewayRouterFunctions.route("booking-service-routes")
                 .route(RequestPredicates.path("/api/bookings/**"), HandlerFunctions.http())
                 .filter(LoadBalancerFilterFunctions.lb("booking-service"))
+                .before(this::jwtAuthFilter)
                 .build();
     }
 
@@ -124,8 +147,49 @@ public class RouteConfig {
         return GatewayRouterFunctions.route("payment-service-routes")
                 .route(RequestPredicates.path("/api/payments/**"), HandlerFunctions.http())
                 .filter(LoadBalancerFilterFunctions.lb("payment-service"))
-
+                .before(this::jwtAuthFilter)
                 .build();
+    }
+
+    private ServerRequest jwtAuthFilter(ServerRequest request) {
+
+        String authHeader = request.headers().firstHeader(JwtConstant.JWT_HEADER);
+
+        // step 1 check auth header exist
+        if (authHeader == null || !authHeader.startsWith(JwtConstant.TOKEN_PREFIX)) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,
+                    "missing or invalid authorization token");
+        }
+
+        // step 2 remove prefix from token
+        String token = authHeader.substring(JwtConstant.TOKEN_PREFIX.length());
+
+        // validate
+        if (!jwtUtil.isTokenValid(token)) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,
+                    "invalid or expired JWT token");
+        }
+
+        // step 3 grab user ifo from jwt token
+        String email = jwtUtil.extractEmail(token);
+        String authorities = jwtUtil.extractAuthorities(token);
+        Long userId = jwtUtil.extractUserId(token);
+
+        return ServerRequest.from(request)
+                .header("X-User-Id", String.valueOf(userId))
+                .header("X-User-Email", email)
+                .header("X-User-Roles", authorities)
+                .build();
+
+    }
+
+    private ServerRequest requireRole(ServerRequest request, String role) {
+        String roles = request.headers().firstHeader("X-User-Roles");
+        if (roles == null || !roles.contains(role)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN,
+                    "access denied, required role '" + role + "'");
+        }
+        return request;
     }
 
 }
