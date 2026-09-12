@@ -10,9 +10,9 @@ import com.project.payload.response.FlightResponse;
 
 public interface FlightService {
 
-    FlightResponse createFlight(Long airlineId, FlightRequest flightRequest) throws Exception;
+    FlightResponse createFlight(Long userId, FlightRequest flightRequest) throws Exception;
 
-    Page<FlightResponse> getFlightsByAirline(Long airlineId, Long departureAirportId, Long arrivalAirportId,
+    Page<FlightResponse> getFlightsByAirline(Long userId, Long departureAirportId, Long arrivalAirportId,
             Pageable pageable);
 
     FlightResponse getFlightById(Long id) throws Exception;
@@ -23,6 +23,6 @@ public interface FlightService {
 
     FlightResponse convertToFlightResponse(Flight flight);
 
-    void deleteFlight(Long airlineId, Long id) throws Exception;
+    void deleteFlight(Long userId, Long id) throws Exception;
 
 }

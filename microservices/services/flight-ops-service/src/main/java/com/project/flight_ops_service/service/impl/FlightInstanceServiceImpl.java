@@ -36,6 +36,8 @@ public class FlightInstanceServiceImpl implements FlightInstanceService {
         public FlightInstanceResponse createFlightInstance(Long userId, FlightInstanceRequest request)
                         throws Exception {
 
+                 AirlineResponse airlineResponse = airlineClient.getAirlineByOwner(userId);
+
                 Flight flight = flightRepository.findById(request.getFlightId()).orElseThrow(
                                 () -> new Exception("Flight not found"));
 
@@ -64,15 +66,17 @@ public class FlightInstanceServiceImpl implements FlightInstanceService {
         }
 
         @Override
-        public Page<FlightInstanceResponse> getByAirlineId(Long airlineId, Long departureAirportId,
+        public Page<FlightInstanceResponse> getByAirlineId(Long userId, Long departureAirportId,
                         Long arrivalAirportId,
                         Long flightId, LocalDate onDate, Pageable pageable) {
+
+                 AirlineResponse airlineResponse = airlineClient.getAirlineByOwner(userId);
 
                 LocalDateTime start = onDate != null ? onDate.atStartOfDay() : null;
                 LocalDateTime end = onDate != null ? onDate.plusDays(1).atStartOfDay() : null;
 
-                return flightInstanceRepository.findByAirlineId(airlineId, departureAirportId, arrivalAirportId,
-                                flightId, start, end, pageable).map(fi -> convertToFlightInstanceResponse(fi));
+                return flightInstanceRepository.findByAirlineId(airlineResponse.getId(), departureAirportId, arrivalAirportId,
+                                flightId, start, end, pageable).map(this::convertToFlightInstanceResponse);
 
         }
 

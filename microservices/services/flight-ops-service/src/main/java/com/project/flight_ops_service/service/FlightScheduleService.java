@@ -7,11 +7,11 @@ import com.project.payload.response.FlightScheduleResponse;
 
 public interface FlightScheduleService {
 
-    FlightScheduleResponse createFlightSchedule(Long airlineId, FlightScheduleRequest request) throws Exception;
+    FlightScheduleResponse createFlightSchedule(Long userId, FlightScheduleRequest request) throws Exception;
 
     FlightScheduleResponse getFlightScheduleById(Long id) throws Exception;
 
-    List<FlightScheduleResponse> getFlightScheduleByAirline(Long airlineId);
+    List<FlightScheduleResponse> getFlightScheduleByAirline(Long userId);
 
     FlightScheduleResponse updateFlightSchedule(Long id, FlightScheduleRequest request) throws Exception;
 

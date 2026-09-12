@@ -33,11 +33,11 @@ public class MealController {
     @PostMapping
     public ResponseEntity<MealResponse> createMeal(
             @Valid @RequestBody MealRequest mealRequest,
-            @RequestHeader("X-Airline-Id") Long airlineId) throws Exception {
+            @RequestHeader("X-User-Id") Long userId) throws Exception {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(
 
-                        mealService.createMeal(airlineId, mealRequest));
+                        mealService.createMeal(userId, mealRequest));
 
     }
 
@@ -49,8 +49,8 @@ public class MealController {
 
     @GetMapping("/airline")
     public ResponseEntity<List<MealResponse>> getMealsByAirlineId(
-            @RequestHeader("X-Airline-Id") Long airlineId) {
-        return ResponseEntity.ok(mealService.getByAirlineId(airlineId));
+            @RequestHeader("X-User-Id") Long userId) {
+        return ResponseEntity.ok(mealService.getByAirlineId(userId));
     }
 
     @PatchMapping("/{id}/availability")
@@ -65,8 +65,8 @@ public class MealController {
     public ResponseEntity<MealResponse> updateMeal(
             @PathVariable Long id,
             @RequestBody MealRequest request,
-            @RequestHeader("X-Airline-Id") Long airlineId) throws Exception {
-        return ResponseEntity.ok(mealService.updateMeal(airlineId, id, request));
+            @RequestHeader("X-User-Id") Long userId) throws Exception {
+        return ResponseEntity.ok(mealService.updateMeal(userId, id, request));
     }
 
     @DeleteMapping("/{id}")

@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import com.project.booking_service.client.AirlineClient;
 import com.project.booking_service.client.AncillaryClient;
 import com.project.booking_service.client.FlightClient;
 import com.project.booking_service.client.PaymentClient;
@@ -28,6 +29,7 @@ import com.project.enums.PaymentGateway;
 import com.project.payload.request.BookingRequest;
 import com.project.payload.request.PassengerRequest;
 import com.project.payload.request.PaymentInitiateRequest;
+import com.project.payload.response.AirlineResponse;
 import com.project.payload.response.BookingResponse;
 import com.project.payload.response.FareResponse;
 import com.project.payload.response.FlightCabinAncillaryResponse;
@@ -51,6 +53,7 @@ public class BookingServiceImpl implements BookingService {
     private final SeatClient seatClient;
     private final AncillaryClient ancillaryClient;
     private final PaymentClient paymentClient;
+    private final AirlineClient airlineClient;
 
     @Override
     public PaymentInitiateResponse createBooking(BookingRequest request, Long userId) {
@@ -127,14 +130,16 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public List<BookingResponse> getAllBookingsByAirline(Long airlineId, String searchQuery, BookingStatus status,
+    public List<BookingResponse> getAllBookingsByAirline(Long userId, String searchQuery, BookingStatus status,
             Long flightInstanceId, String sortDirection) {
+
+        AirlineResponse airlineResponse = airlineClient.getAirlineByOwner(userId);
 
         Sort.Direction direction = "asc".equalsIgnoreCase(sortDirection) ? Sort.Direction.ASC : Sort.Direction.DESC;
 
         Sort sort = Sort.by(direction, "bookingDate");
 
-        List<Booking> bookings = bookingRepository.findByAirlineWithFilter(airlineId, searchQuery, status,
+        List<Booking> bookings = bookingRepository.findByAirlineWithFilter(airlineResponse.getId(), searchQuery, status,
                 flightInstanceId, sort);
 
         return bookings.stream().map(
