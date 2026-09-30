@@ -18,9 +18,9 @@ import com.project.enums.UserRole;
 @Configuration
 public class RouteConfig {
 
-    private JwtUtil jwtUtil;
+    private final JwtUtil jwtUtil;
 
-    private RouteConfig(JwtUtil jwtUtil) {
+    public RouteConfig(JwtUtil jwtUtil) {
         this.jwtUtil = jwtUtil;
     }
 
@@ -163,6 +163,9 @@ public class RouteConfig {
 
         // step 2 remove prefix from token
         String token = authHeader.substring(JwtConstant.TOKEN_PREFIX.length());
+
+        System.out.println("token --------- "+token);
+
 
         // validate
         if (!jwtUtil.isTokenValid(token)) {

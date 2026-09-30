@@ -46,6 +46,7 @@ public class AirlineController {
     @GetMapping("/admin")
     public ResponseEntity<AirlineResponse> getAirlineByOwner(
             @RequestHeader("X-User-Id") Long userId) throws Exception {
+                System.out.println("xxxxxxxxxxxxxxxxxxxxx"+userId);
         return ResponseEntity.ok(airlineService.getAirlineByOwner(userId));
     }
 
