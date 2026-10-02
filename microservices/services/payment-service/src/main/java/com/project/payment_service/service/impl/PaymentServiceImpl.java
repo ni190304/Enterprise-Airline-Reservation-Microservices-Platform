@@ -19,6 +19,8 @@ import com.project.payload.request.PaymentVerifyRequest;
 import com.project.payload.response.PaymentInitiateResponse;
 import com.project.payload.response.PaymentLinkResponse;
 import com.project.payload.response.PaymentStatus;
+import com.project.payment_service.client.UserClient;
+import com.project.payment_service.event.PaymentEventProducer;
 import com.project.payment_service.mapper.PaymentMapper;
 import com.project.payment_service.model.Payment;
 import com.project.payment_service.repository.PaymentRepository;
@@ -34,6 +36,8 @@ public class PaymentServiceImpl implements PaymentService {
 
     private final PaymentRepository paymentRepository;
     private final RazorPayService razorPayService;
+    private final PaymentEventProducer paymentEventProducer;
+    private final UserClient userClient;
 
     @Override
     public PaymentInitiateResponse initiatePayment(PaymentInitiateRequest request) throws RazorpayException {
@@ -68,11 +72,7 @@ public class PaymentServiceImpl implements PaymentService {
 
         if (request.getGateway() == PaymentGateway.RAZORPAY) {
 
-            UserDTO userDTO = new UserDTO();
-            userDTO.setId(1L);
-            userDTO.setFullName("Roshan Kumar");
-            userDTO.setEmail("roshan.kumar@gmail.com");
-            userDTO.setPhone("8989899898");
+            UserDTO userDTO = userClient.getUserById(request.getUserId());
 
             PaymentLinkResponse paymentLinkResponse = razorPayService.createPaymentLink(userDTO, payment);
 
@@ -111,13 +111,15 @@ public class PaymentServiceImpl implements PaymentService {
             payment.setPaidAt(LocalDateTime.now());
             paymentRepository.save(payment);
 
-            // todo : publish kafka event
+            // publish payment success kafka event
+            paymentEventProducer.sendPaymentCompleted(payment);
         } else {
             payment.setStatus(PaymentStatus.FAILED);
             payment.setFailureReason("Payment verification failed");
             paymentRepository.save(payment);
 
-            // todo : publish kafka event
+            // publish payment failure kafka event
+            paymentEventProducer.sendPaymentFailed(payment);
         }
         return PaymentMapper.toDTO(payment);
     }

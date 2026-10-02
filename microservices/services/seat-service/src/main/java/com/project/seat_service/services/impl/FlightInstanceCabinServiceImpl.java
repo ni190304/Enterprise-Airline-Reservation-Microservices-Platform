@@ -17,7 +17,7 @@ import com.project.seat_service.model.SeatInstance;
 import com.project.seat_service.model.SeatMap;
 import com.project.seat_service.repository.CabinClassRepository;
 import com.project.seat_service.repository.FlightInstanceCabinRepository;
-import com.project.seat_service.repository.SeatInstaneRepository;
+import com.project.seat_service.repository.SeatInstanceRepository;
 import com.project.seat_service.repository.SeatMapRepository;
 import com.project.seat_service.services.FlightInstanceCabinService;
 
@@ -31,7 +31,7 @@ public class FlightInstanceCabinServiceImpl implements FlightInstanceCabinServic
     private final CabinClassRepository cabinClassRepository;
     private final SeatMapRepository seatMapRepository;
     private final FlightInstanceCabinRepository flightInstanceCabinRepository;
-    private final SeatInstaneRepository seatInstaneRepository;
+    private final SeatInstanceRepository seatInstaneRepository;
 
     @Override
     public FlightInstanceCabinResponse createFlightInstanceCabin(FlightInstanceCabinRequest request) throws Exception {
