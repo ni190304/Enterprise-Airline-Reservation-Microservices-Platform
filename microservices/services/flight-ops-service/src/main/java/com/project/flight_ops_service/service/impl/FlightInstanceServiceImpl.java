@@ -7,8 +7,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.project.event.FlightInstanceCreatedEvent;
 import com.project.flight_ops_service.client.AirlineClient;
 import com.project.flight_ops_service.client.LocationClient;
+import com.project.flight_ops_service.event.FlightInstanceEventProducer;
 import com.project.flight_ops_service.mapper.FlightInstanceMapper;
 import com.project.flight_ops_service.model.Flight;
 import com.project.flight_ops_service.model.FlightInstance;
@@ -31,12 +33,13 @@ public class FlightInstanceServiceImpl implements FlightInstanceService {
         private final FlightInstanceRepository flightInstanceRepository;
         private final AirlineClient airlineClient;
         private final LocationClient locationClient;
+        private final FlightInstanceEventProducer flightInstanceEventProducer;
 
         @Override
         public FlightInstanceResponse createFlightInstance(Long userId, FlightInstanceRequest request)
                         throws Exception {
 
-                 AirlineResponse airlineResponse = airlineClient.getAirlineByOwner(userId);
+                AirlineResponse airlineResponse = airlineClient.getAirlineByOwner(userId);
 
                 Flight flight = flightRepository.findById(request.getFlightId()).orElseThrow(
                                 () -> new Exception("Flight not found"));
@@ -50,6 +53,13 @@ public class FlightInstanceServiceImpl implements FlightInstanceService {
                 FlightInstance saved = flightInstanceRepository.save(flightInstance);
 
                 // publish kafka event , seat service consume that and create seat instance
+                FlightInstanceCreatedEvent event = FlightInstanceCreatedEvent.builder()
+                                .flightInstanceId(flightInstance.getId())
+                                .aircraftId(flight.getAircraftId())
+                                .flightId(flight.getId())
+                                .build();
+
+                flightInstanceEventProducer.sendFlightInstanceCreated(event);
 
                 return convertToFlightInstanceResponse(saved);
 
@@ -70,13 +80,15 @@ public class FlightInstanceServiceImpl implements FlightInstanceService {
                         Long arrivalAirportId,
                         Long flightId, LocalDate onDate, Pageable pageable) {
 
-                 AirlineResponse airlineResponse = airlineClient.getAirlineByOwner(userId);
+                AirlineResponse airlineResponse = airlineClient.getAirlineByOwner(userId);
 
                 LocalDateTime start = onDate != null ? onDate.atStartOfDay() : null;
                 LocalDateTime end = onDate != null ? onDate.plusDays(1).atStartOfDay() : null;
 
-                return flightInstanceRepository.findByAirlineId(airlineResponse.getId(), departureAirportId, arrivalAirportId,
-                                flightId, start, end, pageable).map(this::convertToFlightInstanceResponse);
+                return flightInstanceRepository
+                                .findByAirlineId(airlineResponse.getId(), departureAirportId, arrivalAirportId,
+                                                flightId, start, end, pageable)
+                                .map(this::convertToFlightInstanceResponse);
 
         }
 
@@ -105,9 +117,11 @@ public class FlightInstanceServiceImpl implements FlightInstanceService {
         private FlightInstanceResponse convertToFlightInstanceResponse(FlightInstance flightInstance) {
 
                 AirlineResponse airline = airlineClient.getAirlineById(flightInstance.getAirlineId());
-                AirportResponse departureAirport = locationClient.getAirportById(flightInstance.getDepartureAirportId());
+                AirportResponse departureAirport = locationClient
+                                .getAirportById(flightInstance.getDepartureAirportId());
                 AirportResponse arrivalAirport = locationClient.getAirportById(flightInstance.getArrivalAirportId());
-                AircraftResponse aircraftResponse = airlineClient.getAircraftById(flightInstance.getFlight().getAircraftId());
+                AircraftResponse aircraftResponse = airlineClient
+                                .getAircraftById(flightInstance.getFlight().getAircraftId());
 
                 return FlightInstanceMapper.toResponse(
                                 flightInstance,
