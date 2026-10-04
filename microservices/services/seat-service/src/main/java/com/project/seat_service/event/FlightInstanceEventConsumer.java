@@ -17,6 +17,7 @@ import com.project.seat_service.repository.FlightInstanceCabinRepository;
 import com.project.seat_service.repository.SeatInstanceRepository;
 import com.project.seat_service.repository.SeatRepository;
 
+import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
@@ -29,9 +30,25 @@ public class FlightInstanceEventConsumer {
     private final FlightInstanceCabinRepository flightInstanceCabinRepository;
     private final SeatInstanceRepository seatInstanceRepository;
 
-    @KafkaListener(topics = "flight-instance-created", groupId = "seat-service-group")
+    @PostConstruct
+    public void testConsumerStarted() {
+        System.out.println("🔥 SEAT SERVICE KAFKA CONSUMER STARTED");
+    }
+
+    @KafkaListener(
+    topics = "flight-instance-created",
+    groupId = "seat-service-debug-123",
+    containerFactory = "kafkaListenerContainerFactory"
+)
     @Transactional
     public void handleFlightInstanceCreated(FlightInstanceCreatedEvent event) {
+
+        System.out.println("🔥🔥🔥 EVENT RECEIVED 🔥🔥🔥");
+
+        System.out.println(
+                "Flight ID: " + event.getFlightId()
+                        + ", Instance ID: " + event.getFlightInstanceId()
+                        + ", Aircraft ID: " + event.getAircraftId());
 
         List<CabinClass> cabinClasses = cabinClassRepository.findByAircraftId(event.getAircraftId());
 

@@ -69,7 +69,7 @@ public class FlightScheduleServiceImpl implements FlightScheduleService {
                                                 LocalDateTime.of(date, savedSchedule.getDepartureTime()));
                                 flightInstanceRequest.setArrivalDateTime(
                                                 LocalDateTime.of(date, savedSchedule.getArrivalTime()));
-                                flightInstanceService.createFlightInstance(airlineResponse.getId(),
+                                flightInstanceService.createFlightInstance(userId,
                                                 flightInstanceRequest);
                         }
 

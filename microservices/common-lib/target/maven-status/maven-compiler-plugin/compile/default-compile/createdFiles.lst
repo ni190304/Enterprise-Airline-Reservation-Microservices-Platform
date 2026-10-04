@@ -59,6 +59,7 @@ com\project\payload\response\AuthResponse.class
 com\project\payload\response\BookingResponse$BookingResponseBuilder.class
 com\project\payload\request\FareRequest$FareRequestBuilder.class
 com\project\domain\AncillaryMetadata.class
+com\project\event\PaymentFailedEvent.class
 com\project\payload\request\FareRulesRequest$FareRulesRequestBuilder.class
 com\project\payload\response\Support.class
 com\project\payload\response\PassengerResponse.class
@@ -73,6 +74,7 @@ com\project\embeddable\BoardingBenefits.class
 com\project\payload\response\FlightScheduleResponse.class
 com\project\enums\CabinClassType.class
 com\project\payload\response\TicketResponse.class
+com\project\event\PaymentCompletedEvent.class
 com\project\payload\request\FareRequest.class
 com\project\enums\BookingStatus.class
 com\project\payload\request\FlightInstanceRequest.class
@@ -90,6 +92,7 @@ com\project\payload\response\SeatMapResponse.class
 com\project\embeddable\SeatBenefits.class
 com\project\payload\request\InsuranceCoverageRequest$InsuranceCoverageRequestBuilder.class
 com\project\payload\response\BaggagePolicyResponse.class
+com\project\event\PaymentFailedEvent$PaymentFailedEventBuilder.class
 com\project\payload\response\CabinClassResponse$CabinClassResponseBuilder.class
 com\project\payload\response\AircraftResponse$AircraftResponseBuilder.class
 com\project\payload\response\PaymentStatus.class
@@ -97,11 +100,14 @@ com\project\payload\response\SeatMapResponse$SeatMapResponseBuilder.class
 com\project\embeddable\FlexibilityBenefits.class
 com\project\enums\AircraftStatus.class
 com\project\enums\FlightStatus.class
+com\project\event\PaymentCompletedEvent$PaymentCompletedEventBuilder.class
 com\project\CommonLibApplication.class
 com\project\enums\TicketStatus.class
+com\project\event\FlightInstanceCreatedEvent.class
 com\project\embeddable\ContactInfo.class
 com\project\payload\request\AirportRequest.class
 com\project\payload\response\AirlineResponse.class
+com\project\event\FlightInstanceCreatedEvent$FlightInstanceCreatedEventBuilder.class
 com\project\payload\request\CabinClassRequest$CabinClassRequestBuilder.class
 com\project\payload\request\AirportRequest$AirportRequestBuilder.class
 com\project\payload\request\MealRequest$MealRequestBuilder.class
