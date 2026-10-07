@@ -28,6 +28,8 @@ public class PaymentEventProducer {
                 .paidAt(payment.getPaidAt())
                 .build();
 
+        System.out.println("payment verified successfully and published event" + event.getBookingId() + "-"+ event.getPaymentId() );
+
         kafkaTemplate.send("payment-completed", event);
     }
 

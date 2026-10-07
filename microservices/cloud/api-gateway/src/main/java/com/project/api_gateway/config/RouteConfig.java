@@ -136,7 +136,7 @@ public class RouteConfig {
     @Bean
     public RouterFunction<ServerResponse> bookingServiceRoutes() {
         return GatewayRouterFunctions.route("booking-service-routes")
-                .route(RequestPredicates.path("/api/bookings/**"), HandlerFunctions.http())
+                .route(RequestPredicates.path("/api/booking/**"), HandlerFunctions.http())
                 .filter(LoadBalancerFilterFunctions.lb("booking-service"))
                 .before(this::jwtAuthFilter)
                 .build();
@@ -164,8 +164,7 @@ public class RouteConfig {
         // step 2 remove prefix from token
         String token = authHeader.substring(JwtConstant.TOKEN_PREFIX.length());
 
-        System.out.println("token --------- "+token);
-
+        System.out.println("token --------- " + token);
 
         // validate
         if (!jwtUtil.isTokenValid(token)) {

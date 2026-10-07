@@ -112,6 +112,7 @@ public class PaymentServiceImpl implements PaymentService {
             paymentRepository.save(payment);
 
             // publish payment success kafka event
+ 
             paymentEventProducer.sendPaymentCompleted(payment);
         } else {
             payment.setStatus(PaymentStatus.FAILED);
