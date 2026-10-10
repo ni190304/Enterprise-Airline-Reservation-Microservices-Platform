@@ -15,6 +15,7 @@ com\project\payload\request\SeatRequest.class
 com\project\payload\response\FlightMealResponse.class
 com\project\payload\response\AncillaryResponse$AncillaryResponseBuilder.class
 com\project\payload\request\FlightRequest$FlightRequestBuilder.class
+com\project\payload\request\FlightSearchRequest$FlightSearchRequestBuilder.class
 com\project\payload\request\AircraftRequest.class
 com\project\payload\request\PaymentInitiateRequest.class
 com\project\payload\request\AirlineRequest$AirlineRequestBuilder.class
@@ -80,6 +81,7 @@ com\project\enums\BookingStatus.class
 com\project\payload\request\FlightInstanceRequest.class
 com\project\payload\response\FareResponse$FareResponseBuilder.class
 com\project\payload\dto\PaymentDTO$PaymentDTOBuilder.class
+com\project\payload\request\FlightSearchRequest.class
 com\project\payload\response\PaymentLinkResponse.class
 com\project\domain\AncillaryMetadata$AncillaryMetadataBuilder.class
 com\project\embeddable\BoardingBenefits$BoardingBenefitsBuilder.class

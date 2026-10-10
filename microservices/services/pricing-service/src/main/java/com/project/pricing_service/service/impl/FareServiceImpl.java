@@ -1,5 +1,6 @@
 package com.project.pricing_service.service.impl;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -97,6 +98,19 @@ public class FareServiceImpl implements FareService {
         List<Fare> fares = fareRepository.findAllById(ids);
 
         return fares.stream().collect(Collectors.toMap(Fare::getId, FareMapper::toResponse));
+    }
+
+    @Override
+    public FareResponse getLowestFareForFlightAndCabin(Long flightId, Long cabinClassId) {
+
+        List<Fare> fares = fareRepository.findByFlightIdAndCabinClassId(flightId, cabinClassId);
+
+        Fare lowestFare = fares.stream()
+                .min(Comparator.comparingDouble(Fare::getTotalPrice))
+                .orElseThrow(null);
+
+        return FareMapper.toResponse(lowestFare);
+
     }
 
 }

@@ -5,12 +5,13 @@ import java.time.LocalDateTime;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.project.flight_ops_service.model.FlightInstance;
 
-public interface FlightInstanceRepository extends JpaRepository<FlightInstance, Long> {
+public interface FlightInstanceRepository extends JpaRepository<FlightInstance, Long>,JpaSpecificationExecutor<FlightInstance> {
 
     @Query("""
                 select fi from FlightInstance fi

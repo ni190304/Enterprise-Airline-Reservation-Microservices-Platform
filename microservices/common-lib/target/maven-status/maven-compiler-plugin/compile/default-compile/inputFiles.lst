@@ -42,6 +42,7 @@ C:\Users\Nihaal\OneDrive\Desktop\Enterprise Airline Reservation Microservices Pl
 C:\Users\Nihaal\OneDrive\Desktop\Enterprise Airline Reservation Microservices Platform\microservices\common-lib\src\main\java\com\project\payload\request\FlightMealRequest.java
 C:\Users\Nihaal\OneDrive\Desktop\Enterprise Airline Reservation Microservices Platform\microservices\common-lib\src\main\java\com\project\payload\request\FlightRequest.java
 C:\Users\Nihaal\OneDrive\Desktop\Enterprise Airline Reservation Microservices Platform\microservices\common-lib\src\main\java\com\project\payload\request\FlightScheduleRequest.java
+C:\Users\Nihaal\OneDrive\Desktop\Enterprise Airline Reservation Microservices Platform\microservices\common-lib\src\main\java\com\project\payload\request\FlightSearchRequest.java
 C:\Users\Nihaal\OneDrive\Desktop\Enterprise Airline Reservation Microservices Platform\microservices\common-lib\src\main\java\com\project\payload\request\InsuranceCoverageRequest.java
 C:\Users\Nihaal\OneDrive\Desktop\Enterprise Airline Reservation Microservices Platform\microservices\common-lib\src\main\java\com\project\payload\request\LoginRequest.java
 C:\Users\Nihaal\OneDrive\Desktop\Enterprise Airline Reservation Microservices Platform\microservices\common-lib\src\main\java\com\project\payload\request\MealRequest.java
