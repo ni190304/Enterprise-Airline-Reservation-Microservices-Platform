@@ -241,6 +241,8 @@ services:
     # NO PORTS EXPOSED - Internal only
     environment:
       SPRING_CLOUD_CONFIG_SERVER_GIT_URI: "https://github.com/ni190304/airline-config"
+      SPRING_CLOUD_CONFIG_SERVER_GIT_USERNAME: "${GITHUB_USERNAME}"
+      SPRING_CLOUD_CONFIG_SERVER_GIT_PASSWORD: "${GITHUB_TOKEN}"
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: "http://service-registry:8761/eureka/"
       SPRING_CLOUD_CONFIG_SERVER_GIT_DEFAULT_LABEL: master
       JAVA_TOOL_OPTIONS: "-Xms128m -Xmx384m -XX:+UseG1GC"
