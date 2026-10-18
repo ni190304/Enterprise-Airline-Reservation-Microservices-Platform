@@ -3,6 +3,10 @@ package com.project.location_service.service.impl;
 import com.project.location_service.mapper.CityMapper;
 import com.project.location_service.model.City;
 import com.project.location_service.repository.CityRepository;
+
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -31,6 +35,7 @@ public class CityServiceImpl implements CityService {
     }
 
     @Override
+    @Cacheable(cacheNames = "cities", key = "#id")
     public CityResponse getCityById(Long id) throws Exception {
 
         City city = cityRepository.findById(id).orElseThrow(
@@ -40,6 +45,10 @@ public class CityServiceImpl implements CityService {
     }
 
     @Override
+    @Caching(evict = {
+            @CacheEvict(cacheNames = "cities", key = "#id"),
+            @CacheEvict(cacheNames = "citiesByCode", allEntries = true)
+    })
     public CityResponse updateCity(Long id, CityRequest request) throws Exception {
 
         City city = cityRepository.findById(id).orElseThrow(
@@ -55,6 +64,10 @@ public class CityServiceImpl implements CityService {
     }
 
     @Override
+    @Caching(evict = {
+            @CacheEvict(cacheNames = "cities", key = "#id"),
+            @CacheEvict(cacheNames = "citiesByCode", allEntries = true)
+    })
     public void deleteCity(Long id) throws Exception {
         City city = cityRepository.findById(id).orElseThrow(
                 () -> new Exception("city not exist with given id"));

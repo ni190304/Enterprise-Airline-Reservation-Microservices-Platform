@@ -39,6 +39,7 @@ public class FlightCabinAncillary {
 
     private Double price;
 
+    @Builder.Default
     private Boolean includedInFare = false;
 
 }

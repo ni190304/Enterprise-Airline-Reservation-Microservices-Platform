@@ -18,8 +18,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -28,8 +28,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
+// @AllArgsConstructor
+// @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 public class Aircraft {
 
@@ -50,15 +50,19 @@ public class Aircraft {
     private Integer seatingCapacity;
 
     @Column(name = "economy_seats")
+    @Builder.Default
     private Integer economySeats = 0;
 
     @Column(name = "premium_economy_seats")
+    @Builder.Default
     private Integer premiumEconomySeats = 0;
 
     @Column(name = "business_seats")
+    @Builder.Default
     private Integer businessSeats = 0;
 
     @Column(name = "first_class_seats")
+    @Builder.Default
     private Integer firstClassSeats = 0;
 
     @Column(name = "range_km")
@@ -78,8 +82,10 @@ public class Aircraft {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false, length = 20)
+    @Builder.Default
     private AircraftStatus status = AircraftStatus.ACTIVE;
 
+    @Builder.Default
     private Boolean isAvailable = true;
 
     @ManyToOne

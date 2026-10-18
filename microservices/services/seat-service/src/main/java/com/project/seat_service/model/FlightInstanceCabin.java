@@ -22,8 +22,8 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
 @Entity
 @EntityListeners(AuditingEntityListener.class)
@@ -42,8 +42,10 @@ public class FlightInstanceCabin {
     @Column(nullable = false)
     private Integer totalSeats;
 
+    @Builder.Default
     private Integer bookedSeats = 0;
 
+    @Builder.Default
     @OneToMany(mappedBy = "flightInstanceCabin",cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SeatInstance> seats=new ArrayList<>();
 

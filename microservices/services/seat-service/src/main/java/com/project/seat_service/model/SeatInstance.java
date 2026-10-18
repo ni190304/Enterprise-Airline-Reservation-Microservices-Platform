@@ -16,11 +16,11 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Version;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.AllArgsConstructor;
 
 @Getter
 @Setter
@@ -46,9 +46,13 @@ public class SeatInstance {
     @ManyToOne
     private Seat seat;
 
+    @Builder.Default
     private SeatAvailabilityStatus status = SeatAvailabilityStatus.AVAILABLE;
 
+    @Builder.Default
     private boolean isBooked = false;
+
+    @Builder.Default
     private boolean isAvailable = true;
 
     private Double fare;

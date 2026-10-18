@@ -24,7 +24,6 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Entity
@@ -48,21 +47,21 @@ public class Seat {
 
     private Double premiumSuperCharge;
 
-    private Boolean isAvailable = true;
+    private Boolean isAvailable;
 
-    private Boolean isBlocked = false;
+    private Boolean isBlocked;
 
-    private Boolean isEmergencyExist = false;
+    private Boolean isEmergencyExist;
 
-    private Boolean isActive = true;
+    private Boolean isActive;
 
-    private Boolean hasExtraLegroom = false;
+    private Boolean hasExtraLegroom;
 
-    private Boolean hasPowerOutlet = false;
+    private Boolean hasPowerOutlet;
 
-    private Boolean hasTvScreen = false;
+    private Boolean hasTvScreen;
 
-    private Boolean hasExtraWidth = false;
+    private Boolean hasExtraWidth;
 
     private Integer seatPitch;
     private Integer seatWidth;
@@ -91,6 +90,17 @@ public class Seat {
 
     @Version
     private Long version;
+
+    public Seat() {
+        this.isAvailable = true;
+        this.isBlocked = false;
+        this.isEmergencyExist = false;
+        this.isActive = true;
+        this.hasExtraLegroom = false;
+        this.hasPowerOutlet = false;
+        this.hasTvScreen = false;
+        this.hasExtraWidth = false;
+    }
 
     public Double getTotalPrice() {
         Double total = basePrice != null ? basePrice : 0;

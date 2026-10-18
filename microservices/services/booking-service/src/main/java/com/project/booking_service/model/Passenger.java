@@ -62,7 +62,7 @@ public class Passenger {
     @ManyToOne
     private Booking booking;
 
-    private Boolean isActive = true;
+    private Boolean isActive;
 
     @Version
     private Long version;

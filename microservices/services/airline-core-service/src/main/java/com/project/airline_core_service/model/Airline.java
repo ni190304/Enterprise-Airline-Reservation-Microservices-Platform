@@ -60,6 +60,7 @@ public class Airline {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
+    @Builder.Default
     private AirlineStatus status = AirlineStatus.ACTIVE;
 
     private String alliance;

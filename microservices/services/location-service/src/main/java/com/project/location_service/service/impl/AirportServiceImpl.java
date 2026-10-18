@@ -3,6 +3,9 @@ package com.project.location_service.service.impl;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 
 import com.project.location_service.repository.AirportRepository;
@@ -15,10 +18,10 @@ import lombok.RequiredArgsConstructor;
 
 import com.project.location_service.mapper.AirportMapper;
 import com.project.location_service.model.Airport;
-import com.project.location_service.model.City;;
+import com.project.location_service.model.City;
 
 @Service
-@RequiredArgsConstructor
+@RequiredArgsConstructor 
 public class AirportServiceImpl implements AirportService {
 
     private final AirportRepository airportRepository;
@@ -44,6 +47,7 @@ public class AirportServiceImpl implements AirportService {
     }
 
     @Override
+    @Cacheable(cacheNames = "airports", key = "#id")
     public AirportResponse getAirportById(Long id) throws Exception {
 
         Airport airport = airportRepository.findById(id).orElseThrow(
@@ -53,6 +57,7 @@ public class AirportServiceImpl implements AirportService {
     }
 
     @Override
+    @Cacheable(cacheNames = "allAirports")
     public List<AirportResponse> getAllAirports() {
         return airportRepository.findAll().stream()
                 .map(AirportMapper::toResponse)
@@ -60,6 +65,11 @@ public class AirportServiceImpl implements AirportService {
     }
 
     @Override
+    @Caching(evict = {
+            @CacheEvict(cacheNames = "airports", key = "#id"),
+            @CacheEvict(cacheNames = "allAirports", allEntries = true),
+            @CacheEvict(cacheNames = "airportsByCity", allEntries = true)
+    })
     public AirportResponse updateAirport(Long id, AirportRequest request) throws Exception {
         Airport existingAirport = airportRepository.findById(id).orElseThrow(
                 () -> new Exception("airport not exists with id: " + id));
@@ -79,6 +89,11 @@ public class AirportServiceImpl implements AirportService {
     }
 
     @Override
+    @Caching(evict = {
+            @CacheEvict(cacheNames = "airports", key = "#id"),
+            @CacheEvict(cacheNames = "allAirports", allEntries = true),
+            @CacheEvict(cacheNames = "airportsByCity", allEntries = true)
+    })
     public void deleteAirport(Long id) throws Exception {
 
         Airport airport = airportRepository.findById(id).orElseThrow(
@@ -88,6 +103,7 @@ public class AirportServiceImpl implements AirportService {
     }
 
     @Override
+    @Cacheable(cacheNames = "airportsByCity", key = "#cityId")
     public List<AirportResponse> getAirportByCityId(Long cityId) {
         return airportRepository.findByCityId(cityId)
                 .stream()

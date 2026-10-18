@@ -48,6 +48,7 @@ public class Flight {
     @Column(nullable = false)
     private Long arrivalAirportId;
 
+    @Builder.Default
     private FlightStatus status = FlightStatus.SCHEDULED;
 
     @CreatedDate

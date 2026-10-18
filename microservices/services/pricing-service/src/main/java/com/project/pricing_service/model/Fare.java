@@ -75,18 +75,23 @@ public class Fare {
     private FareRules fareRules;
 
     @Embedded
+    @Builder.Default
     private SeatBenefits seatBenefits = new SeatBenefits();
 
     @Embedded
+    @Builder.Default
     private BoardingBenefits boardingBenefits = new BoardingBenefits();
 
     @Embedded
+    @Builder.Default
     private InFlightBenefits inFlightBenefits = new InFlightBenefits();
 
     @Embedded
+    @Builder.Default
     private FlexibilityBenefits flexibilityBenefits = new FlexibilityBenefits();
 
     @Embedded
+    @Builder.Default
     private PremiumServiceBenefits premiumServiceBenefits = new PremiumServiceBenefits();
 
     @CreationTimestamp

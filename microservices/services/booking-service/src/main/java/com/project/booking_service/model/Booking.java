@@ -35,10 +35,10 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Builder
+@AllArgsConstructor
 public class Booking {
 
     @Id
@@ -61,6 +61,7 @@ public class Booking {
     private Long airlineId;
 
     @Enumerated(EnumType.STRING)
+    @Builder.Default
     private CabinClassType cabinClass = CabinClassType.ECONOMY;
 
     @Column(nullable = false)
@@ -70,6 +71,7 @@ public class Booking {
     private LocalDateTime ticketTimeLimit;
 
     @OneToMany(mappedBy = "booking", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
     private Set<Passenger> passengers = new HashSet<>();
 
     @ElementCollection
@@ -82,6 +84,7 @@ public class Booking {
     private List<Long> mealIds;
 
     @OneToMany(mappedBy = "booking", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
     private Set<Ticket> tickets = new HashSet<>();
 
     private Long paymentId;

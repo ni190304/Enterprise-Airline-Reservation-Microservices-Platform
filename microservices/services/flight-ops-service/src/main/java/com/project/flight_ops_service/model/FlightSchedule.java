@@ -57,7 +57,8 @@ public class FlightSchedule {
     @Enumerated(EnumType.STRING)
     private List<DayOfWeek> operatingDays;
 
-    private Boolean isActive=true;
+    @Builder.Default
+    private Boolean isActive = true;
 
 
 }

@@ -15,9 +15,16 @@ import lombok.Setter;
 @Builder
 public class SeatBenefits {
 
+    @Builder.Default
     private Boolean extraSeatSpace = false;
+
+    @Builder.Default
     private Boolean preferredSeatChoice = false;
+
+    @Builder.Default
     private Boolean advanceSeatSelection = false;
+
+    @Builder.Default
     private Boolean guaranteedSeatTogether = false;
 
 }
