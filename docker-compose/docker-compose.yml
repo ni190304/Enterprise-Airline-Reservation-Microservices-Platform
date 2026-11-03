@@ -210,8 +210,9 @@ services:
   kafka:
       image: apache/kafka:4.1.1
       container_name: kafka
-      mem_limit: 1g
+      mem_limit: 1536m
       mem_reservation: 512m
+      restart: unless-stopped
       cpus: 1.0
       ports:
         - "127.0.0.1:9094:9094"   # host access for Maven-run services
@@ -282,9 +283,6 @@ services:
     cpus: 0.5
     ports:
       - "8761:8761"
-    depends_on:
-        config-server:
-            condition: service_healthy
     environment:
       SPRING_CONFIG_IMPORT: "optional:configserver:http://config-server:8888/"
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: "http://service-registry:8761/eureka/"
