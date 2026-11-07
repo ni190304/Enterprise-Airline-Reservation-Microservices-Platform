@@ -42,7 +42,7 @@ Wait-Port 8888 "Config server"
 $services = @(
     "user-service", "location-service", "airline-core-service",
     "flight-ops-service", "pricing-service", "ancillary-service",
-    "booking-service", "payment-service", "seat-service"
+    "booking-service", "payment-service", "seat-service", "notification-service"
 )
 foreach ($service in $services) { Start-Svc "services\$service" }
 
