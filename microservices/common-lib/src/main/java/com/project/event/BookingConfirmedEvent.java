@@ -36,13 +36,13 @@ public class BookingConfirmedEvent {
     // - FLight
     private Long flightInstanceId;
     private String flightNumber;
-    private String airlineNane;
+    private String airlineName;
     private String airlineLogo;
     private String aircraftModel;
 
     // Departure
     private String departureAirportCode;
-    private String departureAirportNane;
+    private String departureAirportName;
     private String departureCity;
     private String departureCountry;
     private LocalDateTime departureDateTime;
@@ -82,7 +82,7 @@ public class BookingConfirmedEvent {
     private Boolean partialRefund;
     private Boolean fullRefund;
     private Boolean priorityBoarding;
-    private Boolean LoungeAccess;
+    private Boolean loungeAccess;
     private Boolean complimentaryMeals;
 
     private List<Long> seatInstanceIds;

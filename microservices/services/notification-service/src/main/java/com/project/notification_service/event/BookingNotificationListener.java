@@ -1,0 +1,31 @@
+package com.project.notification_service.event;
+
+import java.io.UnsupportedEncodingException;
+
+import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.messaging.handler.annotation.Payload;
+import org.springframework.stereotype.Component;
+
+import com.project.event.BookingConfirmedEvent;
+import com.project.notification_service.service.EmailService;
+
+import jakarta.mail.MessagingException;
+import lombok.RequiredArgsConstructor;
+
+@Component
+@RequiredArgsConstructor
+public class BookingNotificationListener {
+
+    private final EmailService emailService;
+
+    @KafkaListener(topics = "booking.confirmed", groupId = "notification-service-group")
+
+    public void handleBookingConfirmed(@Payload BookingConfirmedEvent event)
+            throws UnsupportedEncodingException, MessagingException {
+
+        System.out.println("event--------------" + event);
+
+        emailService.sendBookingConfirmation(event);
+    }
+
+}

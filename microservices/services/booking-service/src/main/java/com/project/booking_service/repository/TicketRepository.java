@@ -10,18 +10,20 @@ import com.project.booking_service.model.Ticket;
 
 public interface TicketRepository extends JpaRepository<Ticket, Long> {
 
-    @Query("""
-            select t from Ticket t
-            left join fetch t.booking
-            left join fetch t.passenger
-            where t.booking.id =: bookingId
-            """)
+        @Query("""
+                        select t from Ticket t
+                        left join fetch t.booking
+                        left join fetch t.passenger
+                        where t.booking.id =: bookingId
+                        """)
 
-    List<Ticket> findByBookingIdWithDetails(
-            @Param("bookingId") Long bookingId);
+        List<Ticket> findByBookingIdWithDetails(
+                        @Param("bookingId") Long bookingId);
 
-    List<Ticket> findByBookingId(long bookingId);
+        List<Ticket> findByBookingId(long bookingId);
 
-    boolean existsByTicketNumber(String ticketNumber);
+        boolean existsByTicketNumber(String ticketNumber);
+
+        boolean existsByBookingIdAndPassengerId(Long bookingId, Long passengerId);
 
 }

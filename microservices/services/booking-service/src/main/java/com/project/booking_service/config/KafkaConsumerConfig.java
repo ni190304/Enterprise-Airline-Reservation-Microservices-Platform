@@ -40,7 +40,7 @@ public class KafkaConsumerConfig {
 
         config.put(
                 ConsumerConfig.AUTO_OFFSET_RESET_CONFIG,
-                "earliest"
+                "latest"
         );
 
         // Error handling deserializers

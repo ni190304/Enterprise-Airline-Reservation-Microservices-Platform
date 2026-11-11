@@ -86,7 +86,8 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     private String generateTransactionId() {
-        return "TXN_" + System.currentTimeMillis() + "_" + UUID.randomUUID().toString().substring(0, 0).toUpperCase();
+        return "TXN_" + System.currentTimeMillis() + "_"
+                + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
     }
 
     @Override
@@ -112,7 +113,7 @@ public class PaymentServiceImpl implements PaymentService {
             paymentRepository.save(payment);
 
             // publish payment success kafka event
- 
+
             paymentEventProducer.sendPaymentCompleted(payment);
         } else {
             payment.setStatus(PaymentStatus.FAILED);

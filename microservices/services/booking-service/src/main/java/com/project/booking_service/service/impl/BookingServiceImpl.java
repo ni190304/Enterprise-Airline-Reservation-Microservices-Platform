@@ -22,7 +22,6 @@ import com.project.booking_service.model.Passenger;
 import com.project.booking_service.repository.BookingRepository;
 import com.project.booking_service.service.BookingService;
 import com.project.booking_service.service.PassengerService;
-import com.project.booking_service.service.TicketService;
 import com.project.booking_service.service.integration.FareIntegrationService;
 import com.project.enums.BookingStatus;
 import com.project.enums.PaymentGateway;
@@ -47,7 +46,6 @@ public class BookingServiceImpl implements BookingService {
 
     private final BookingRepository bookingRepository;
     private final PassengerService passengerService;
-    private final TicketService ticketService;
     private final FlightClient flightClient;
     private final FareIntegrationService fareIntegrationService;
     private final SeatClient seatClient;
@@ -91,14 +89,18 @@ public class BookingServiceImpl implements BookingService {
             passenger1.setBooking(booking);
         }
 
-        ticketService.generateTicketsForBooking(booking);
-
         Double fareTotal = fareIntegrationService.calculateFareTotal(request.getFareId());
         Double seatPrice = seatClient.calculateSeatPrice(booking.getSeatInstanceIds());
         Double ancillaryPrice = ancillaryClient.calculateAncillariesPrice(booking.getAncillaryIds());
         Double mealPrice = ancillaryClient.calculateMealPrice(booking.getMealIds());
 
-        Double totalPrice = mealPrice + seatPrice + ancillaryPrice;
+        Double totalPrice = fareTotal + mealPrice + seatPrice + ancillaryPrice;
+
+        System.out.println("Fare Total: " + fareTotal);
+        System.out.println("Seat Price: " + seatPrice);
+        System.out.println("Ancillary Price: " + ancillaryPrice);
+        System.out.println("Meal Price: " + mealPrice);
+        System.out.println("Total Price: " + totalPrice);
 
         PaymentInitiateRequest paymentRequest = PaymentInitiateRequest.builder()
                 .userId(userId)
@@ -109,6 +111,12 @@ public class BookingServiceImpl implements BookingService {
                 .build();
 
         PaymentInitiateResponse response = paymentClient.initiatePayment(paymentRequest);
+
+        // Save the internal payment ID in the booking.
+        if (response != null && response.getPaymentId() != null) {
+            booking.setPaymentId(response.getPaymentId());
+            bookingRepository.save(booking);
+        }
 
         return response;
 

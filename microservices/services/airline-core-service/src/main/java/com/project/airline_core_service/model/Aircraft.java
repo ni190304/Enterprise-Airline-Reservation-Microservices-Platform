@@ -21,15 +21,13 @@ import jakarta.persistence.ManyToOne;
 import lombok.Builder;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Getter
 @Setter
 @Builder
-// @AllArgsConstructor
-// @NoArgsConstructor
+@AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 public class Aircraft {
 
@@ -100,6 +98,9 @@ public class Aircraft {
     @LastModifiedDate
     @Column(name = "updated_at", nullable = false)
     private Instant updatedAt;
+
+    public Aircraft() {
+    }
 
     public Integer getTotalSeats() {
         return economySeats + premiumEconomySeats + businessSeats + firstClassSeats;

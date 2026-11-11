@@ -1,3 +1,4 @@
+
 package com.project.booking_service.service.impl;
 
 import java.time.LocalDateTime;
@@ -25,24 +26,40 @@ public class TicketServiceImpl implements TicketService {
     @Override
     public List<Ticket> generateTicketsForBooking(Booking booking) {
 
-        List<Ticket> tickets = new ArrayList<Ticket>();
+        List<Ticket> tickets = new ArrayList<>();
+
+        if (booking == null || booking.getId() == null) {
+            throw new IllegalArgumentException("Booking must be saved first");
+        }
+
+        if (booking.getPassengers() == null) {
+            return tickets;
+        }
 
         for (Passenger passenger : booking.getPassengers()) {
-            String ticketNumber = generateUniqueTicketNumber();
+
+            if (passenger.getId() == null) {
+                throw new IllegalArgumentException("Passenger must be saved first");
+            }
+
+            // Skip passengers who already have a ticket for this booking.
+            if (ticketRepository.existsByBookingIdAndPassengerId(
+                    booking.getId(), passenger.getId())) {
+                continue;
+            }
 
             Ticket ticket = Ticket.builder()
-                    .ticketNumber(ticketNumber)
+                    .ticketNumber(generateUniqueTicketNumber())
                     .status(TicketStatus.BOOKED)
                     .issuedAt(LocalDateTime.now())
                     .booking(booking)
                     .passenger(passenger)
                     .build();
 
-            Ticket savedTicket = ticketRepository.save(ticket);
-            tickets.add(savedTicket);
+            tickets.add(ticket);
         }
 
-        return tickets;
+        return ticketRepository.saveAll(tickets);
     }
 
     private String generateUniqueTicketNumber() {
@@ -53,7 +70,19 @@ public class TicketServiceImpl implements TicketService {
             String randomPart = UUID.randomUUID().toString().substring(0, 8);
             ticketNumber = String.format("TKT-%s-%s", datePart, randomPart);
         } while (ticketRepository.existsByTicketNumber(ticketNumber));
+
         return ticketNumber;
     }
 
+    @Override
+    public void cancelTicketsForBooking(Long bookingId) {
+
+        List<Ticket> tickets = ticketRepository.findByBookingId(bookingId);
+
+        for (Ticket ticket : tickets) {
+            ticket.setStatus(TicketStatus.CANCELLED);
+        }
+
+        ticketRepository.saveAll(tickets);
+    }
 }

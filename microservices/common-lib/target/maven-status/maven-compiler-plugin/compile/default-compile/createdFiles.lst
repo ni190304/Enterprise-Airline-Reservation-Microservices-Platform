@@ -50,6 +50,7 @@ com\project\payload\request\FlightScheduleRequest$FlightScheduleRequestBuilder.c
 com\project\embeddable\PremiumServiceBenefits.class
 com\project\payload\request\AirlineRequest.class
 com\project\payload\response\FlightInstanceCabinResponse.class
+com\project\event\PassengerNotificationData.class
 com\project\payload\response\PaymentInitiateResponse.class
 com\project\enums\SeatType.class
 com\project\payload\response\FlightCabinAncillaryResponse$FlightCabinAncillaryResponseBuilder.class
@@ -59,9 +60,11 @@ com\project\enums\AirlineStatus.class
 com\project\payload\response\AuthResponse.class
 com\project\payload\response\BookingResponse$BookingResponseBuilder.class
 com\project\payload\request\FareRequest$FareRequestBuilder.class
+com\project\event\BookingConfirmedEvent.class
 com\project\domain\AncillaryMetadata.class
 com\project\event\PaymentFailedEvent.class
 com\project\payload\request\FareRulesRequest$FareRulesRequestBuilder.class
+com\project\event\BookingConfirmedEvent$BookingConfirmedEventBuilder.class
 com\project\payload\response\Support.class
 com\project\payload\response\PassengerResponse.class
 com\project\payload\response\PaymentInitiateResponse$PaymentInitiateResponseBuilder.class
@@ -114,6 +117,7 @@ com\project\payload\request\CabinClassRequest$CabinClassRequestBuilder.class
 com\project\payload\request\AirportRequest$AirportRequestBuilder.class
 com\project\payload\request\MealRequest$MealRequestBuilder.class
 com\project\payload\request\InsuranceCoverageRequest.class
+com\project\event\PassengerNotificationData$PassengerNotificationDataBuilder.class
 com\project\enums\PaymentGateway.class
 com\project\payload\request\PaymentVerifyRequest.class
 com\project\payload\response\FareRulesResponse$FareRulesResponseBuilder.class
