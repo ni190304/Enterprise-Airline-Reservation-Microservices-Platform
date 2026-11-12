@@ -47,13 +47,17 @@ public class PaymentEventListener {
                         return;
                 }
 
+                // Prevent duplicate processing of an already-issued booking.
+                if (booking.isTicketIssued()) {
+                        System.out.println("Booking already processed: " + booking.getId());
+                        return;
+                }
+
                 booking.setStatus(BookingStatus.CONFIRMED);
 
                 // Generate tickets only once, after successful payment.
-                if (!booking.isTicketIssued()) {
-                        ticketService.generateTicketsForBooking(booking);
-                        booking.setTicketIssued(true);
-                }
+                ticketService.generateTicketsForBooking(booking);
+                booking.setTicketIssued(true);
 
                 bookingRepository.save(booking);
 

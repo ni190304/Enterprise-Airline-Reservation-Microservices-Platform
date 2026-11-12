@@ -44,7 +44,15 @@ public class EmailService {
         mimeMessageHelper.setFrom(fromEmail, fromName);
         mimeMessageHelper.setTo(booking.getContactEmail());
         mimeMessageHelper.setSubject(buildSubject(booking));
-        mimeMessageHelper.setText(buildHtmlBody(booking));
+
+        // Set the email body as HTML.
+        mimeMessageHelper.setText(buildHtmlBody(booking), true);
+
+        // Actually send the email.
+        mailSender.send(mimeMessage);
+
+        System.out.println("Booking confirmation email sent to: "
+                + booking.getContactEmail());
     }
 
     private String buildHtmlBody(BookingConfirmedEvent booking) {

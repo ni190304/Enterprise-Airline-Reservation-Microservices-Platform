@@ -1,3 +1,4 @@
+
 package com.project.booking_service.config;
 
 import java.util.HashMap;
@@ -7,21 +8,22 @@ import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
 import org.springframework.kafka.support.serializer.JacksonJsonSerializer;
 
+import com.project.event.BookingConfirmedEvent;
 import com.project.event.FlightInstanceCreatedEvent;
 
+@Configuration
 public class KafkaProducerConfig {
 
     @Value("${spring.kafka.bootstrap-servers}")
     private String bootstrapServers;
 
-    @Bean
-    public ProducerFactory<String, FlightInstanceCreatedEvent> producerFactory() {
-
+    private Map<String, Object> producerConfig() {
         Map<String, Object> config = new HashMap<>();
 
         config.put(
@@ -39,11 +41,36 @@ public class KafkaProducerConfig {
             JacksonJsonSerializer.class
         );
 
-        return new DefaultKafkaProducerFactory<>(config);
+        return config;
+    }
+
+    // Existing flight-instance event producer
+    @Bean
+    public ProducerFactory<String, FlightInstanceCreatedEvent>
+            flightInstanceProducerFactory() {
+
+        return new DefaultKafkaProducerFactory<>(producerConfig());
     }
 
     @Bean
-    public KafkaTemplate<String, FlightInstanceCreatedEvent> kafkaTemplate() {
-        return new KafkaTemplate<>(producerFactory());
+    public KafkaTemplate<String, FlightInstanceCreatedEvent>
+            flightInstanceKafkaTemplate() {
+
+        return new KafkaTemplate<>(flightInstanceProducerFactory());
+    }
+
+    // Dedicated booking-confirmation event producer
+    @Bean
+    public ProducerFactory<String, BookingConfirmedEvent>
+            bookingConfirmedProducerFactory() {
+
+        return new DefaultKafkaProducerFactory<>(producerConfig());
+    }
+
+    @Bean
+    public KafkaTemplate<String, BookingConfirmedEvent>
+            bookingConfirmedKafkaTemplate() {
+
+        return new KafkaTemplate<>(bookingConfirmedProducerFactory());
     }
 }

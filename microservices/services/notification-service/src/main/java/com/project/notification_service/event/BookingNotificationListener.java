@@ -5,6 +5,7 @@ import java.io.UnsupportedEncodingException;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.project.event.BookingConfirmedEvent;
 import com.project.notification_service.service.EmailService;
@@ -20,6 +21,7 @@ public class BookingNotificationListener {
 
     @KafkaListener(topics = "booking.confirmed", groupId = "notification-service-group")
 
+    @Transactional
     public void handleBookingConfirmed(@Payload BookingConfirmedEvent event)
             throws UnsupportedEncodingException, MessagingException {
 

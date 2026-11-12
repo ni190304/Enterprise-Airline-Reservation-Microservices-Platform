@@ -42,7 +42,6 @@ public class TicketServiceImpl implements TicketService {
                 throw new IllegalArgumentException("Passenger must be saved first");
             }
 
-            // Skip passengers who already have a ticket for this booking.
             if (ticketRepository.existsByBookingIdAndPassengerId(
                     booking.getId(), passenger.getId())) {
                 continue;
@@ -59,7 +58,12 @@ public class TicketServiceImpl implements TicketService {
             tickets.add(ticket);
         }
 
-        return ticketRepository.saveAll(tickets);
+        List<Ticket> savedTickets = ticketRepository.saveAll(tickets);
+
+        // Keep the Booking entity's ticket collection in sync.
+        booking.getTickets().addAll(savedTickets);
+
+        return savedTickets;
     }
 
     private String generateUniqueTicketNumber() {
